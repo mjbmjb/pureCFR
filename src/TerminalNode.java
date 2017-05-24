@@ -21,7 +21,7 @@ public class TerminalNode extends BettingNode {
 	 */
 	@Override
 	public int evaluate(Hand hand, int position) {
-		return (showdown ? hand.showdown_value[position] : fold_value[position]) * money;
+		return (showdown ? hand.showdownValue[position] : fold_value[position]) * money;
 	}
 
 }

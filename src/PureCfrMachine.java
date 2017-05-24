@@ -1,3 +1,5 @@
+import java.io.File;
+
 
 public class PureCfrMachine implements Game{
 	protected AbstractGame ag;
@@ -37,15 +39,73 @@ public class PureCfrMachine implements Game{
 		
 	}
 	
-	public int writeDump(String dumpPrefix) {
-		return 0;
-		//TODO writeDump
+	public boolean writeDump(String dumpPrefix) {
+		String filenamer = dumpPrefix + ".regrets";
+		
+		File filer = new File(filenamer);
+		
+		try {
+			for (int r = 0;r < MAX_ROUNDS; ++r) {
+				if (regrets[r].write(filer)) {
+					System.out.println("(write)Error while dumping round" + r + "to file" + filenamer);
+					return true;
+ 				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Dump avg strategy
+		String filenames = dumpPrefix + ".strategy";
+		File files = new File(filenames);
+		// Dump avg strategy
+		try {
+			for (int r = 0;r < MAX_ROUNDS; ++r) {
+				if (regrets[r].write(files)) {
+					System.out.println("(write)Error while dumping round" + r + "to file" + filenames);
+					return true;
+ 				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
-	public int loadDump(String dumpPrefix) {
-		return 0;
-		//TODO loaddump
+	public boolean loadDump(String dumpPrefix) {
+		String filenamer = dumpPrefix + ".regrets";
+		
+		File filer = new File(filenamer);
+		
+		try {
+			for (int r = 0;r < MAX_ROUNDS; ++r) {
+				if (regrets[r].load(filer)) {
+					System.out.println("(read)Error while dumping round" + r + "to file" + filenamer);
+					return true;
+ 				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Dump avg strategy
+		String filenames = dumpPrefix + ".strategy";
+		File files = new File(filenames);
+		// Dump avg strategy
+		try {
+			for (int r = 0;r < MAX_ROUNDS; ++r) {
+				if (regrets[r].load(files)) {
+					System.out.println("(read)Error while dumping round" + r + "to file" + filenames);
+					return true;
+ 				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
+	
+	
 	
 	protected int generateHand(Hand hand) {
 		GameState state = new GameState();

@@ -114,6 +114,33 @@ public class Entries {
 		return false;
 	}
 	
+	public boolean write(File file) throws IOException {
+		if (wasLoaded) {
+			System.out.println("tried to write data that was loaded at instantiation,which is not allowed");
+			return true;
+		}
+		DataOutputStream dout = null;
+		// Dump entries
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		
+		dout = new DataOutputStream(new FileOutputStream(file));
+		int index = 0;
+		for (double iter : entries) {
+			dout.writeDouble(iter);
+			index ++;
+		}
+		
+		if (index != totalNumEntries) {
+			System.out.println("error while writing; only wrote" + index + "of" + totalNumEntries + "entries");
+			dout.close();
+			return true;
+		}
+		dout.close();
+		return false;
+	}
+	
 	public void getValues(int bucket, int solnIdx, int numChoices,int[] values) {
 		int baseIndex = getEntriesIndex(bucket, solnIdx);
 		
