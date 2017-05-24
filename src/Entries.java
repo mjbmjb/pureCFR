@@ -8,7 +8,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// A class for storing regret and avg strategies of variable type.
+/**
+ *  A class for storing regret and avg strategies of variable type.
+ *
+ */
 public class Entries {
 	protected int numEntriesPerBucket;
 	protected int totalNumEntries;
@@ -48,11 +51,11 @@ public class Entries {
 	public void updateRegret(int bucket,
 						int solnIdx,
 						int numChoices,
-						int[] values,
-						int retval) {
+						double[] values,
+						double retval) {
 		int baseIndex = getEntriesIndex(bucket, solnIdx);
 		for (int c = 0; c < numChoices; ++c) {
-			int diff = values[c] - retval;
+			double diff = values[c] - retval;
 			double newRegret = this.entries[c + baseIndex] + diff;
 			/* Only update regret if no overflow occurs £¨¸ã²»¶®...£©*/
 			if (((diff < 0) && (newRegret < this.entries[c + baseIndex])) || ((diff > 0) && (newRegret > this.entries[c + baseIndex])))

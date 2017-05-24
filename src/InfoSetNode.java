@@ -1,13 +1,16 @@
 
-public class InfoSetNode extends BettingNode {
+public class InfoSetNode extends BettingNode implements Game{
 	protected  final int solnIdx;
 	protected  final int numChoices;
 	protected  final int player;
 	protected  final int round;
 	protected  final BettingNode child;
 		
-	public InfoSetNode(int newSolnIdx,int newNumChoice,int  newPlayer, int newRound,
-				BettingNode newChild) {
+	public InfoSetNode(int newSolnIdx,
+					   int newNumChoice,
+					   int  newPlayer,
+					   int newRound,
+					   BettingNode newChild) {
 			super();
 			this.solnIdx = newSolnIdx ;
 		    this.numChoices = newNumChoice;
@@ -16,23 +19,34 @@ public class InfoSetNode extends BettingNode {
 		    this.child = newChild;
 		}
 
+		@Override
 		public BettingNode getChild() {
 			return child;
 		}
+		
+		@Override
 		public int getSolnIdx(){
 			return solnIdx;
 		}
+		
+		@Override
 		public int getNumChoices(){
 			return numChoices;
 		}
+		
+		@Override
 		public int getPlayer(){
 			return player;
 		}
+		
+		@Override
 		public int getRound(){
 			return round;
 		}
-		public int didPlayerFold(final int position){
-			return 0;
+		
+		@Override
+		public boolean didPlayerFold(final int position){
+			return false;
 		}
 }
 

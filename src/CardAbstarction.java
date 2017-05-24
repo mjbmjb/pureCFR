@@ -8,7 +8,7 @@ public class CardAbstarction implements Game {
 	public int numBucket(BettingNode node) {
 		return 0;
 	}
-	public int getBucket(BettingNode node, int[] boardCards) {
+	public int getBucket(BettingNode node, int[] boardCards, int[][] holeCards) {
 		return 0;
 	}
 	public boolean canPrecomputeBucket(BettingNode node) {

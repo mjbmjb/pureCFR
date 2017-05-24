@@ -5,6 +5,8 @@ public class BettingNode implements Game{
 	protected int money;
 	protected BettingNode sibling = null;
 	
+
+
 	public BettingNode() {
 		// TODO Auto-generated constructor stub
 	}
@@ -13,12 +15,42 @@ public class BettingNode implements Game{
 		return 0;
 	}
 	
-	public int get_num_choices() {
+	public int getNumChoices() {
 		return 0;
 	}
 
+	public BettingNode getChild() {
+		return null;
+	}
+	
 	public void setSibling(BettingNode sibing) {
 		this.sibling = sibing;
+	}
+	
+	public BettingNode getSibling() {
+		return sibling;
+	}
+	
+	public int getRound() {
+		return 0;
+	}
+	
+	public int getPlayer() {
+		return 0;
+	}
+	
+	public boolean didPlayerFold(int position) {
+		return false;
+	}
+
+	/**
+	 * º∆À„utility
+	 * @param hand
+	 * @param position
+	 * @return
+	 */
+	public int evaluate(Hand hand,int position) {
+		return 0;
 	}
 	
 	private static int getActions(GameState state, ActionType[] act, int stage) {
