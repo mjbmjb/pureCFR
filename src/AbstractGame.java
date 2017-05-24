@@ -1,5 +1,5 @@
 
-public class AbstractGame implements Game{
+public class AbstractGame implements IGame{
 	public BettingNode bettingTreeRoot;
 	public ActionAbstraction actionAbs;
 	public CardAbstarction cardAbs;

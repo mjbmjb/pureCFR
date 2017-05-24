@@ -1,21 +1,9 @@
 
-interface Game {
-	public static int MAX_PLAYERS = 0;
-	public static int MAX_ROUNDS = 4;
-	public static int MAX_BOARD_CARDS=7;
-	public static int MAX_HOLE_CARDS=3;
-	public static int MAX_NUM_ACTIONS=64;
-	public static int MAX_SUITS=4;
-	public static int MAX_RANKS=13;
-//	public static int MAX_LINE_LEN=READBUF_LEN;
+public class Game implements IGame {
 
-	public static int NUM_ACTION_TYPES=3;
-	public static int BIG_BLIND = 20;
-	public static int SMALL_BLIND = 10;//TODO 大小盲注默认值
-	public static int STACK_SIZE = 0;
-	public static int MAX_ABSTRACT_ACTIONS = 4;
-	public class GameDef {
-
+	public Game() {
+		// TODO Auto-generated constructor stub
+	}
 		  /* stack sizes for each player */
 		  public int[] stack = new int[ MAX_PLAYERS ];
 
@@ -49,5 +37,5 @@ interface Game {
 
 		  /* number of shared public cards each round */
 		  public int[] numBoardCards = new int[ MAX_ROUNDS ];	
-	}
+	
 }

@@ -10,7 +10,7 @@ import java.util.Arrays;
 //import com.google.common.base.Service.State;
 
 
-public class GameState implements Game, Cloneable {
+public class GameState implements IGame, Cloneable {
 
 	private final static int[] blind = { 100, 50 };
 

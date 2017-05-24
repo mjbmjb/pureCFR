@@ -1,5 +1,5 @@
 
-public class ActionAbstraction implements Game{
+public class ActionAbstraction implements IGame{
 
 	public ActionAbstraction() {
 		// TODO Auto-generated constructor stub

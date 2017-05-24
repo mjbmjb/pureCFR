@@ -1,5 +1,5 @@
 
-public class InfoSetNode extends BettingNode implements Game{
+public class InfoSetNode extends BettingNode implements IGame{
 	protected  final int solnIdx;
 	protected  final int numChoices;
 	protected  final int player;

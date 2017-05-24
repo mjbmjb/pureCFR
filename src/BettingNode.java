@@ -1,5 +1,5 @@
 
-public class BettingNode implements Game{
+public class BettingNode implements IGame{
 	protected int showdown;
 	protected int[] fold_value = new int[2];
 	protected int money;

@@ -1,7 +1,7 @@
 import java.io.File;
 
 
-public class PureCfrMachine implements Game{
+public class PureCfrMachine implements IGame{
 	protected AbstractGame ag;
 	protected Entries[] regrets = new Entries[MAX_ROUNDS];
 	protected Entries[] avgStrategy = new Entries[MAX_ROUNDS];

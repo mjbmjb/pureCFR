@@ -1,5 +1,5 @@
 
-public class CardAbstarction implements Game {
+public class CardAbstarction implements IGame {
 
 	public CardAbstarction() {
 		// TODO Auto-generated constructor stub
