@@ -5,6 +5,25 @@ public class AbstractGame implements IGame{
 	public CardAbstarction cardAbs;
 	
 	public AbstractGame() {
+		// Create Game 
+		Game game = new Game();
+		// Create Game end
+		
+		//Creat action abstraction
+		actionAbs = new NullActionAbstraction();
+		
+		// init numEntriesPerBUcket to zero
+		int[] numEntriesPerBucket = new int[MAX_ROUNDS];
+		
+		//process betting tree
+		GameState state = new GameState();
+		bettingTreeRoot = new BettingNode().initBettingTree(state, game, actionAbs, numEntriesPerBucket);
+		
+		// Create card abstraction
+		
+		
+		
+		
 		// TODO Auto-generated constructor stub
 	}
 	/**

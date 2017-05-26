@@ -53,61 +53,62 @@ public class BettingNode implements IGame{
 		return 0;
 	}
 	
-	private static int getActions(GameState state, ActionType[] act, int stage) {
-		int numActions = 0;
-		char[] actionName = { 'f', 'c', 'r' };
-		for (int a = 0; a < 3; ++a) {
-			ActionType action = new ActionType(actionName[a], 0);
-			if (action.getType() == 'r') {
-				int[] raiseSize = { 0, 0 }; // minRaiseSize and maxRaiseSize
-				if (state.raiseIsValid(raiseSize)) {
-					/*
-					 * Check for pot-size raise being valid. First, get the pot
-					 * size.
-					 */
-					int potSize = 0;
-					for (int p = 0; p < MAX_PLAYERS; ++p) {
-						potSize += state.getSpent(p);
-					}
-					/*
-					 * Add amount needed to call. This gives the size of a
-					 * pot-sized raise
-					 */
-					int player = state.currentPlayer();
-					int amount_to_call = state.getMaxSpent()
-							- state.getSpent(player);
-					potSize += amount_to_call;
-					switch (stage) {
-					case 1:
-						break;
-					case 2:
-						break;
-					default:
-						for (Double value : BetSizes.getRiverActionAbstraction().values()) {
-							int potRaiseSize = (int) (value * potSize
-									+ state.getSpent(player) + amount_to_call);
-							if (potRaiseSize < raiseSize[1]) {
-								act[numActions] = new ActionType('r',
-										potRaiseSize);
-								++numActions;
-							}
-						}
-					}
-					/* Now add all-in */
-					act[numActions] = new ActionType('r', raiseSize[1]);
-					++numActions;
-				}
-			} else if (state.isValidAction(action)) {
-				act[numActions] = new ActionType(action.getType(), 0);
-				++numActions;
-			}
-		}
-		return numActions;
-	}
+//	private static int getActions(GameState state, ActionType[] act, int stage) {
+//		int numActions = 0;
+//		char[] actionName = { 'f', 'c', 'r' };
+//		for (int a = 0; a < 3; ++a) {
+//			ActionType action = new ActionType(actionName[a], 0);
+//			if (action.getType() == 'r') {
+//				int[] raiseSize = { 0, 0 }; // minRaiseSize and maxRaiseSize
+//				if (state.raiseIsValid(raiseSize)) {
+//					/*
+//					 * Check for pot-size raise being valid. First, get the pot
+//					 * size.
+//					 */
+//					int potSize = 0;
+//					for (int p = 0; p < MAX_PLAYERS; ++p) {
+//						potSize += state.getSpent(p);
+//					}
+//					/*
+//					 * Add amount needed to call. This gives the size of a
+//					 * pot-sized raise
+//					 */
+//					int player = state.currentPlayer();
+//					int amount_to_call = state.getMaxSpent()
+//							- state.getSpent(player);
+//					potSize += amount_to_call;
+//					switch (stage) {
+//					case 1:
+//						break;
+//					case 2:
+//						break;
+//					default:
+//						for (Double value : BetSizes.getRiverActionAbstraction().values()) {
+//							int potRaiseSize = (int) (value * potSize
+//									+ state.getSpent(player) + amount_to_call);
+//							if (potRaiseSize < raiseSize[1]) {
+//								act[numActions] = new ActionType('r',
+//										potRaiseSize);
+//								++numActions;
+//							}
+//						}
+//					}
+//					/* Now add all-in */
+//					act[numActions] = new ActionType('r', raiseSize[1]);
+//					++numActions;
+//				}
+//			} else if (state.isValidAction(action)) {
+//				act[numActions] = new ActionType(action.getType(), 0);
+//				++numActions;
+//			}
+//		}
+//		return numActions;
+//	}
 	
-	public static BettingNode initBettingTree(GameState state, int[] numEntriesPerBucket,int stage) {
+	public BettingNode initBettingTree(GameState state, Game game, ActionAbstraction actionAbs, int[] numEntriesPerBucket) {
 	    BettingNode	node;
-		if(state.isFinished() || state.getRoundIsOver(stage)){
+		if(state.isFinished()){
+			assert(true);
 			// create termial node
 			boolean showdown = state.getPlayerFolded(0) || state.getPlayerFolded(1) ? false : true;
 			int[] foldValue = new int[2];
@@ -129,8 +130,8 @@ public class BettingNode implements IGame{
 			return node;
 		}
 		 /* Choice node.  First, compute number of different allowable actions */
-		ActionType[] actions = new ActionType[MAX_ABSTRACT_ACTION];
-		int numChoices = getActions(state, actions,stage);
+		ActionType[] actions = new ActionType[MAX_ABSTRACT_ACTIONS];
+		int numChoices = actionAbs.getActions(game, state, actions);
         /* Next, grab the index for this node into the regrets and avg_strategy */
         int solnIdx=numEntriesPerBucket[0];
         /* Update number of entries */
@@ -140,8 +141,8 @@ public class BettingNode implements IGame{
 		BettingNode last_child = null;
 		for (int a = 0; a < numChoices; a++) {
 			GameState newState =(GameState)state.clone();
-			newState.doAction(actions[a]);
-			BettingNode child = initBettingTree(newState, numEntriesPerBucket,stage);
+			newState.doAction(game, actions[a]);
+			BettingNode child = initBettingTree(state, game, actionAbs, numEntriesPerBucket);
 			if (last_child != null) {
 				last_child.setSibling(child);
 			} else {
@@ -149,6 +150,7 @@ public class BettingNode implements IGame{
 			}
 			last_child = child;
 		}
+		assert(last_child != null);
 		last_child.setSibling(null);
 		node = new InfoSetNode(solnIdx, numChoices, state.currentPlayer(), state.getRound(), first_child);
 		return node;

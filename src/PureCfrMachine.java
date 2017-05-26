@@ -12,6 +12,7 @@ public class PureCfrMachine implements IGame{
 		 */
 		int[] numEntriesPerBucket = new int[MAX_ROUNDS];
 		int[] totalNumEntries = new int[MAX_ROUNDS];
+		ag = new AbstractGame();
 		ag.countEntries(numEntriesPerBucket, totalNumEntries);
 		
 		// ≥ı ºªØ regret ∫Õ avg strategy
@@ -121,7 +122,8 @@ public class PureCfrMachine implements IGame{
 		 /* State must be in the final round for rankHand to work properly */
 		state.setRound(MAX_ROUNDS - 1);
 		for (int p = 0; p < MAX_PLAYERS; ++p) {
-			ranks[p] = rankHand(state);
+//			ranks[p] = rankHand(state); TODO rank hand
+			ranks[p] = 1;
 			if (ranks[p] > topRank) {
 				topRank = ranks[p];
 				numTies = 1;

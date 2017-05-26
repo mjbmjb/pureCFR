@@ -93,4 +93,14 @@ public class PureCfr implements IGame {
 		}
 	}
 	
+	public static void main(String args[]) {
+		PureCfr pc = new PureCfr();
+		
+		Patameters params = new Patameters();
+		
+		PureCfrMachine pcm = new PureCfrMachine();
+		
+		pc.runIteration(params, pcm);
+	}
+	
 }
