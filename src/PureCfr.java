@@ -14,8 +14,10 @@ public class PureCfr implements IGame {
 		boolean doPause = false;
 		boolean doQuit = false;
 		
+		MyUtil.prl("here we start");
 		// Record the time we started
 		long abStartTime = System.currentTimeMillis();
+		
 		PureCounter initPc = new PureCounter();
 		
 		if (params.loadDump) {
@@ -41,7 +43,10 @@ public class PureCfr implements IGame {
 		// 开始工作，先记录一下dump time ，每次dump后更新
 		long dumpStartTime = System.currentTimeMillis();
 		
+		//count loop
+		int loopCounter = 0;
 		while (!doQuit) {
+			loopCounter ++;
 			// Get the current time
 			long curTime = System.currentTimeMillis();
 			
@@ -51,9 +56,14 @@ public class PureCfr implements IGame {
 			
 			// pcm iterations
 			pcm.doIteration();
+			++ initPc.iterations;
 			
 			// Is it time to quit?
 			doQuit = ((curTime - abStartTime) > params.maxWalltimgSec);
+			
+			if (doQuit) {
+				MyUtil.prl("Stop,loops " + loopCounter + " times");
+			}
 			
 			// Get the number of iterations completed
 			long iterationsComplete = initPc.iterations;
@@ -81,6 +91,7 @@ public class PureCfr implements IGame {
 						   ".secs-" + 
 					       workSecStr;
 				
+				pcm.writeDump(fileName);
 				System.out.println("Checkpointing files with perfix:" + fileName);
 				
 				// How much time was spent dumping?

@@ -5,7 +5,7 @@ public class CardAbstarction implements IGame {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int numBucket(BettingNode node) {
+	public int numBucket(Game game, BettingNode node) {
 		return 0;
 	}
 	public int getBucket(BettingNode node, int[] boardCards, int[][] holeCards) {

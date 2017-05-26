@@ -18,8 +18,11 @@ public class NullActionAbstraction extends ActionAbstraction{
 				actions[a] = new ActionType(actionType[a],RAISE_SIZE);
 				numOfAction ++;
 			}
-			actions[a] = new ActionType(actionType[a],0);//TODO 是不是要设为其他值？ 
-			numOfAction ++;	
+			else {
+				actions[a] = new ActionType(actionType[a],0);//TODO 是不是要设为其他值？ 
+				numOfAction ++;
+			}
+	
 		}
 		return numOfAction;
 	}

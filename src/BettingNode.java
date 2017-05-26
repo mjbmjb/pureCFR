@@ -133,16 +133,17 @@ public class BettingNode implements IGame{
 		ActionType[] actions = new ActionType[MAX_ABSTRACT_ACTIONS];
 		int numChoices = actionAbs.getActions(game, state, actions);
         /* Next, grab the index for this node into the regrets and avg_strategy */
-        int solnIdx=numEntriesPerBucket[0];
+        int solnIdx=numEntriesPerBucket[state.getRound()];
         /* Update number of entries */
-        numEntriesPerBucket[0]+=numChoices;
+        numEntriesPerBucket[state.getRound()]+=numChoices;
         /* Recurse to create children */       
 		BettingNode first_child = null;
 		BettingNode last_child = null;
+//		System.out.println(numChoices);
 		for (int a = 0; a < numChoices; a++) {
 			GameState newState =(GameState)state.clone();
 			newState.doAction(game, actions[a]);
-			BettingNode child = initBettingTree(state, game, actionAbs, numEntriesPerBucket);
+			BettingNode child = initBettingTree(newState, game, actionAbs, numEntriesPerBucket);
 			if (last_child != null) {
 				last_child.setSibling(child);
 			} else {

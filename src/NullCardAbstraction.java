@@ -27,7 +27,8 @@ public class NullCardAbstraction extends CardAbstarction implements IGame{
 		}
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	@Override
 	public int numBucket(Game game, BettingNode node) {
 		return mNumBuckets[node.getRound()];
 	}

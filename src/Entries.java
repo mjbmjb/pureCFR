@@ -21,6 +21,7 @@ public class Entries {
 	public Entries(int numEntriesPerBucket, int totalNumEntries) {
 		this.numEntriesPerBucket = numEntriesPerBucket;
 		this.totalNumEntries = totalNumEntries;
+		entries = new double[totalNumEntries]; 
 	}
 	/* Returns the sum of all pos_values in the returned pos_values array */	
 	public double getPosValue(int bucket,
@@ -131,6 +132,9 @@ public class Entries {
 			dout.writeDouble(iter);
 			index ++;
 		}
+		
+		MyUtil.prl("total num of entry is " + totalNumEntries + "-");
+		
 		
 		if (index != totalNumEntries) {
 			System.out.println("error while writing; only wrote" + index + "of" + totalNumEntries + "entries");

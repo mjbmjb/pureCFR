@@ -3,10 +3,11 @@ public class AbstractGame implements IGame{
 	public BettingNode bettingTreeRoot;
 	public ActionAbstraction actionAbs;
 	public CardAbstarction cardAbs;
+	public Game game;
 	
 	public AbstractGame() {
 		// Create Game 
-		Game game = new Game();
+		game = new Game();
 		// Create Game end
 		
 		//Creat action abstraction
@@ -20,8 +21,7 @@ public class AbstractGame implements IGame{
 		bettingTreeRoot = new BettingNode().initBettingTree(state, game, actionAbs, numEntriesPerBucket);
 		
 		// Create card abstraction
-		
-		
+		cardAbs = new NullCardAbstraction(game);
 		
 		
 		// TODO Auto-generated constructor stub
@@ -45,13 +45,14 @@ public class AbstractGame implements IGame{
 		
 		// Update entries counts
 		numEntriesPerBucket[round] += numChoices;
-		int buckets = cardAbs.numBucket(node);
+
+		int buckets = cardAbs.numBucket(game, node);
 		totalNumEntries[round] += buckets * numChoices;
 		
-		// Recurse 递归的找child，更新totalNumEntries中记录的entry 的数目
+		// Recurse 递归的找sibling，更新totalNumEntries中记录的entry 的数目
 		for (int c = 0; c < numChoices; ++c) {
 			countEntriesR(child, numEntriesPerBucket, totalNumEntries);
-			child = child.getChild();
+			child = child.getSibling();
 		}
 	}
 	

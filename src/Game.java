@@ -17,10 +17,10 @@ public class Game implements IGame {
 //		  enum BettingType bettingType;
 
 		  /* number of players in the game */
-		  public int numPlayers;
+		  public int numPlayers = 2;
 
 		  /* number of betting rounds */
-		  public int numRounds;
+		  public int numRounds = 2;
 
 		  /* first player to act in a round */
 		  public int[] firstPlayer = new int[ MAX_ROUNDS ];
@@ -29,13 +29,13 @@ public class Game implements IGame {
 		  public int[] maxRaises = new int[ MAX_ROUNDS ];
 
 		  /* number of suits and ranks in the deck of cards */
-		  public int numSuits;
-		  public int numRanks;
+		  public int numSuits = 4;
+		  public int numRanks = 13;
 
 		  /* number of private player cards */
-		  public int numHoleCards;
+		  public int numHoleCards = 2;
 
 		  /* number of shared public cards each round */
-		  public int[] numBoardCards = new int[ MAX_ROUNDS ];	
+		  public int[] numBoardCards = {0,1};	
 	
 }

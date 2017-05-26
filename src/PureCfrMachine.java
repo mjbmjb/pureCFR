@@ -37,7 +37,11 @@ public class PureCfrMachine implements IGame{
 	 * 开始迭代计算regret TODO 参数 rng_state_t
 	 */
 	public void doIteration() {
-		
+		Hand hand = new Hand();
+		//TODO Generate Hand
+		for (int p = 0;p < MAX_PLAYERS; ++p) {
+			walkPureCfr(p, ag.bettingTreeRoot, hand);
+		}
 	}
 	
 	public boolean writeDump(String dumpPrefix) {

@@ -205,6 +205,16 @@ public class GameState implements IGame, Cloneable {
 		return curPlayer;
 	}
 
+	public int numRaises() {
+		int ret = 0;
+		for (int i = 0;i < numActions[getRound()]; ++i) {
+			if (action[getRound()][i].getType() == 'r') {
+				++ ret;
+			}
+		}
+		return ret;
+	}
+	
 	public int numFolded() {
 		int ret = 0;
 		for (int p = 0; p < MAX_PLAYERS; p++) {
@@ -249,7 +259,7 @@ public class GameState implements IGame, Cloneable {
 
 	public void doAction(Game game, ActionType act) {
 		int p = currentPlayer();
-
+		
 		action[round][numActions[round]] = (ActionType) act.clone();
 		actingPlayer[round][numActions[round]] = p;
 		++numActions[round];
@@ -277,7 +287,9 @@ public class GameState implements IGame, Cloneable {
 //			break;
 			
 			// limit betting game
-			if (getMaxSpent() + game.raiseSize[getRound()] > game.stack[getRound()]) {
+//			System.out.print("now round:" + getRound());
+//			assert(getRound() <= MAX_ROUNDS);
+			if (getMaxSpent() + game.raiseSize[getRound()] > game.stack[p]) {
 				setMaxSpent(game.stack[p]);
 			}
 			spent[p] = getMaxSpent();
@@ -338,6 +350,14 @@ public class GameState implements IGame, Cloneable {
 				 */
 				finished = true;
 				round = MAX_ROUNDS - 1;
+			}
+		} else if (numRaises() >= MAX_REISE_NUM[getRound()]){
+			//num of raise reach the limitation
+			if (round + 1 < MAX_ROUNDS) {
+				++ round;
+				}
+			else {
+				finished = true;
 			}
 		}
 	}
