@@ -50,6 +50,8 @@ public class GameState implements IGame, Cloneable {
 	/* largest bet so far, including all previous rounds */
 	private int maxSpent;
 	
+
+
 	private boolean [] roundIsOver; 
 	
 	
@@ -102,12 +104,10 @@ public class GameState implements IGame, Cloneable {
 		}
 		
 		// numActions[r]
-//		for (int i : numActions)
-//			i = 0;
+
 		Arrays.fill(numActions, 0);
 		// boardCards[i]
-//		for (int i : boardCards)
-//			i = 0;
+
 		Arrays.fill(boardCards, 0);
 		// holeCards[p][i]
 		for (int[] i : holeCards) {
@@ -117,8 +117,7 @@ public class GameState implements IGame, Cloneable {
 		// finish
 		finished = false;
 		// playerFolded[p]
-//		for (boolean i : playerFolded)
-//			i = false;
+
 		Arrays.fill(playerFolded, false);
 		// spent[p]
 		for (int p = 0; p < MAX_PLAYERS; p++) {
@@ -163,6 +162,10 @@ public class GameState implements IGame, Cloneable {
 
 	public int[] getSpent() {
 		return spent;
+	}
+	
+	public void setMaxSpent(int maxSpent) {
+		this.maxSpent = maxSpent;
 	}
 
 	public int getSpent(int position) {
@@ -244,7 +247,7 @@ public class GameState implements IGame, Cloneable {
 		return ret;
 	}
 
-	public void doAction(ActionType act) {
+	public void doAction(Game game, ActionType act) {
 		int p = currentPlayer();
 
 		action[round][numActions[round]] = (ActionType) act.clone();
@@ -264,37 +267,51 @@ public class GameState implements IGame, Cloneable {
 				this.spent[p] = this.maxSpent;
 			}
 			break;
-		case 'r':
-			if (act.getSize() + act.getSize() - maxSpent > minNoLimitRaiseTo) {
-				minNoLimitRaiseTo = act.getSize() + act.getSize() - maxSpent;
+		case 'r': //TODO  Limit Game
+			// no limit betting
+//			if (act.getSize() + act.getSize() - maxSpent > minNoLimitRaiseTo) {
+//				minNoLimitRaiseTo = act.getSize() + act.getSize() - maxSpent;
+//			}
+//			maxSpent = act.getSize();
+//			spent[p] = maxSpent;
+//			break;
+			
+			// limit betting game
+			if (getMaxSpent() + game.raiseSize[getRound()] > game.stack[getRound()]) {
+				setMaxSpent(game.stack[p]);
 			}
-			maxSpent = act.getSize();
-			spent[p] = maxSpent;
+			spent[p] = getMaxSpent();
 			break;
 		}
 		/* see if the round or game has ended */
 		if (numFolded() + 1 >= MAX_PLAYERS) {
+			/* only one player left - game is immediately over, no showdown */
 			finished = true;
 		} else if (numCalled() >= numActingPlayers()) {
+			/* >= 2 non-folded players, all acting players have called */
 			if (numActingPlayers() > 1) {
+				/* there are at least 2 acting players */
 				if (round + 1 < MAX_ROUNDS) {
-					switch (round) {
-					case 0:
-						roundIsOver[0] = true;
-						break;
-					case 1:
-						roundIsOver[1] = true;
-						break;
-					case 2:
-						roundIsOver[2] = true;
-						break;
-					case 3:
-						roundIsOver[3] = true;
-						break;
-					default:
-						break;
-					}
-					++round;
+					/* active players move onto next round */
+//					switch (round) {
+//					case 0:
+//						roundIsOver[0] = true;
+//						break;
+//					case 1:
+//						roundIsOver[1] = true;
+//						break;
+//					case 2:
+//						roundIsOver[2] = true;
+//						break;
+//					case 3:
+//						roundIsOver[3] = true;
+//						break;
+//					default:
+//						break;
+//					}
+//					++round;
+					++ round;
+					
 					
 					minNoLimitRaiseTo = 1;
 					for (p = 0; p < MAX_PLAYERS; ++p) {

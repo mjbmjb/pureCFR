@@ -5,7 +5,7 @@ public class ActionAbstraction implements IGame{
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getActions(GameState state, ActionType[] action) {
+	public int getActions(Game game, GameState state, ActionType[] action) {
 		return 0;
 	}
 	
