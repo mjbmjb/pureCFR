@@ -259,7 +259,7 @@ public class GameState implements IGame, Cloneable {
 
 	public void doAction(Game game, ActionType act) {
 		int p = currentPlayer();
-		
+		assert(act != null);
 		action[round][numActions[round]] = (ActionType) act.clone();
 		actingPlayer[round][numActions[round]] = p;
 		++numActions[round];
@@ -399,7 +399,7 @@ public class GameState implements IGame, Cloneable {
 		return action[r][p];
 	}
 	
-	public boolean isValidAction(ActionType action) {
+	public boolean isValidAction(Game game, ActionType action) {
 		int p = 0;
 		int[] raiseSize = { 0, 0 }; // minRaiseSize, maxRaiseSize;
 		if (finished) {
@@ -410,18 +410,23 @@ public class GameState implements IGame, Cloneable {
 			if (!raiseIsValid(raiseSize)) {
 				return false;
 			}
-			if (action.getSize() < raiseSize[0]) {
-				return false;
-			} else if (action.getSize() > raiseSize[1]) {
-				return false;
+			if (game.bettingType) {
+				if (action.getSize() < raiseSize[0]) {
+					return false;
+				} else if (action.getSize() > raiseSize[1]) {
+					return false;
+				}
 			}
 		} else if (action.getType() == 'f') {
 			if (spent[p] == maxSpent || spent[p] == STACK_SIZE) {
-				if (spent[p] == BIG_BLIND) {
-					return true;
-				} else {
-					return false;
-				}
+//				if (spent[p] == BIG_BLIND) {
+//					return true;
+//				} else {
+//					return false;
+//				}
+				// mjb modified
+				return false;
+				
 			}
 			if (action.getSize() != 0) {
 				action.setSize(0);

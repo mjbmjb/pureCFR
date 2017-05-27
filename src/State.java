@@ -5,7 +5,7 @@ public class State {
 	public int maxSpent;
 	public int minNoLimitRaiseTo;
 	public int [] spent;
-	public Action [][] action;
+	public ActionType [][] action;
 	public int [][] actingPlayer;
 	public int [] numActions;
 	public int round;
