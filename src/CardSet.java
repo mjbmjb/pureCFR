@@ -4,7 +4,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Random;
 
 
 class CardSetConstants{
@@ -19,7 +18,7 @@ class CardSetConstants{
     public static final int HANDCLASS_STRAIGHT_FLUSH = 12103;       
 }
 
-public class CardSet extends CardSetConstants implements IGame{
+public class CardSet extends CardSetConstants{
     public long cards;
     
     public int [] anySuitVal;
@@ -169,48 +168,4 @@ public class CardSet extends CardSetConstants implements IGame{
     	return postponed;
     }
     
-    public int dealCard(int[] deck, int numCards, Random rd) {
-    	int i, ret;
-    	
-    	i = rd.nextInt(numCards);
-    	ret = deck[i];
-    	deck[i] = deck[numCards - 1];
-    	
-    	return ret;
-
-    }
-    
-    /**
-     * shuffle a deck of cards and deal them out, writing the results to state
-     * @param game
-     * @param state
-     */
-    public void dealCards(Game game, GameState state) {
-    	int r, s, numCards, i, p;
-    	int[] deck = new int[MAX_RANKS * MAX_SUITS];
-    	
-    	numCards = 0;
-    	Random rd = new Random();
-    	for (s = 0;s < game.numSuits; ++ s) {
-    		for (r = 0; r < game.numRanks; ++ r) {
-    			deck[numCards] = r * game.numSuits + s ;
-    			++ numCards;
-    		}
-    	}
-    	
-    	for (p = 0; p < game.numPlayers; ++p) {
-    		for (i = 0; i < game.numHoleCards; ++i) {
-    			state.holeCards[p][i] = dealCard(deck, numCards, rd);
-    			--numCards;
-    	    }
-    	}
-    }
-    
-    public int sumBoardCards(Game game, int round) {
-    	int r, total = 0;
-    	for (r = 0; r <= round; ++ r) {
-    		total += game.numBoardCards[r];
-    	}
-    	return total;
-    }
 }
