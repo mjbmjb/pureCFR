@@ -34,7 +34,7 @@ public class GameState implements IGame, Cloneable {
 	private int[] boardCards;
 
 	/* private cards */
-	private int[][] holeCards;
+	public int[][] holeCards;
 
 	/* finished is true if and only if game is over */
 	private boolean finished;
