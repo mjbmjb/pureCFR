@@ -1,8 +1,9 @@
 
 public class PureCfr implements IGame {
-
+	Game game;
+	
 	public PureCfr() {
-		// TODO Auto-generated constructor stub
+		game = new Game();
 	}
 	
 	class PureCounter {
@@ -55,7 +56,7 @@ public class PureCfr implements IGame {
 			long workTime = curTime;
 			
 			// pcm iterations
-			pcm.doIteration();
+			pcm.doIteration(game);
 			++ initPc.iterations;
 			
 			// Is it time to quit?

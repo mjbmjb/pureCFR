@@ -18,5 +18,9 @@ interface IGame {
 	
 	//mjb added
 	public static int RAISE_SIZE = 20;
-	
+
+	// For acpc dealer
+	public static int VERSION_MAJOR = 2;
+	public static int VERSION_MINOR = 0;
+	public static int VERSION_REVISION = 0;
 }

@@ -37,22 +37,22 @@ public class NullCardAbstraction extends CardAbstarction implements IGame{
 		return mNumBuckets[state.getRound()];
 	}
 
-	@Override
-	public int getBucketInternal(Game game, 
-								 int boardCard[], 
-								 int holeCard[], 
-								 int player, 
-								 int round) {
-		/* Calculate the unique bucket number for this hand */
-		int bucket = 0;
-		for (int i = 0;i < game.numHoleCards; ++i) {
-			if (i > 0) {
-				bucket *= deckSize;
-			}
-		}
-	}
-	
-	
+//	@Override
+//	public int getBucketInternal(Game game, 
+//								 int boardCard[], 
+//								 int holeCard[], 
+//								 int player, 
+//								 int round) {
+//		/* Calculate the unique bucket number for this hand */
+//		int bucket = 0;
+//		for (int i = 0;i < game.numHoleCards; ++i) {
+//			if (i > 0) {
+//				bucket *= deckSize;
+//			}
+//		}
+//	}
+//	
+//	
 	
 
 }

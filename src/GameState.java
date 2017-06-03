@@ -1,6 +1,7 @@
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Random;
 
 //import javax.print.attribute.standard.RequestingUserName;
 //import javax.swing.plaf.basic.BasicInternalFrameTitlePane.IconifyAction;
@@ -15,7 +16,7 @@ public class GameState implements IGame, Cloneable {
 	private final static int[] blind = { 100, 50 };
 
 	/* current round : preflop = 0; flop = 1; turn = 2; river = 3 */
-	private int round;
+	public int round;
 
 	/* Action[ r ][ i ] gives the i'th action in round r */
 	private ActionType[][] action;
@@ -27,11 +28,13 @@ public class GameState implements IGame, Cloneable {
 	 */
 	private int[][] actingPlayer;
 
+
+
 	/* numActions[ r ] gives the number of Actions made in round r */
-	private int[] numActions;
+	public int[] numActions;
 
 	/* public cards (including cards which may not yet be visible to players) */
-	private int[] boardCards;
+	public int[] boardCards;
 
 	/* private cards */
 	public int[][] holeCards;
@@ -184,6 +187,12 @@ public class GameState implements IGame, Cloneable {
 		finished = false;
 
 	}
+
+	public int getActingPlayer(int round, int action) {
+		return actingPlayer[round][action];
+	}
+
+	
 
 	public int currentPlayer() {
 		int curPlayer = 0;
@@ -438,7 +447,103 @@ public class GameState implements IGame, Cloneable {
 		}
 		return true;
 	}
+    public int dealCard(int[] deck, int numCards, Random rd) {
+    	int i, ret;
+    	
+    	i = rd.nextInt(numCards);
+    	ret = deck[i];
+    	deck[i] = deck[numCards - 1];
+    	
+    	return ret;
 
+    }
+    
+    /**
+     * shuffle a deck of cards and deal them out, writing the results to state
+     * @param game
+     * @param state
+     */
+    public void dealCards(Game game, GameState state) {
+    	int r, s, numCards, i, p;
+    	int[] deck = new int[MAX_RANKS * MAX_SUITS];
+    	
+    	numCards = 0;
+    	Random rd = new Random();
+    	for (s = 0;s < game.numSuits; ++ s) {
+    		for (r = 0; r < game.numRanks; ++ r) {
+    			deck[numCards] = r * game.numSuits + s ;
+    			++ numCards;
+    		}
+    	}
+    	
+    	for (p = 0; p < game.numPlayers; ++p) {
+    		for (i = 0; i < game.numHoleCards; ++i) {
+    			state.holeCards[p][i] = dealCard(deck, numCards, rd);
+    			--numCards;
+    	    }
+    	}
+    }
+    
+    public int sumBoardCards(Game game, int round) {
+    	int r, total = 0;
+    	for (r = 0; r <= round; ++ r) {
+    		total += game.numBoardCards[r];
+    	}
+    	return total;
+    }
+    
+    public int suitOfCard(Game game, int card) {
+    	return card % game.numSuits;
+    }
+    
+    public int rankOfCard(Game game, int card) {
+    	return card / game.numSuits;
+    }
+    
+	public int rankHand(Game game, int player) {
+		int i;
+		
+		if ((game.numHoleCards == 1) && (sumBoardCards(game, round) == 0)) {
+			return rankOfCard(game, holeCards[player][0]);
+		}
+		
+		CardSet c = new CardSet();
+		
+		for (i = 0; i < game.numHoleCards; ++ i) {
+			c.addCard(suitOfCard(game, holeCards[player][i]),
+					  rankOfCard(game, holeCards[player][i]));
+		}
+		
+		for (i = 0; i < sumBoardCards(game, round); ++ i) {
+			c.addCard(suitOfCard(game, boardCards[i]),
+					  rankOfCard(game, boardCards[i]));
+		}
+		
+		return c.rankCardSet();
+	}
+	
+	public int nextPlayer(Game game, int curPlayer) {
+		int n = curPlayer;
+		
+		do {
+			n = (n + 1) % game.numPlayers;
+		}while (playerFolded[n] || spent[n] >= game.stack[n]);
+		//当fold或者筹码用完时跳过该玩家
+		
+		return n;
+	}
+	
+	public int currentPlayer(Game game) {
+		/* if action has already been made, compute next player from last player */
+		if (numActions[round] != 0) {
+			return nextPlayer(game, actingPlayer[round][numActions[round]]);
+		}
+		
+		/* first player in a round is determined by the game and round
+	     use nextPlayer() because firstPlayer[round] might be unable to act
+	     So start from the last player, use nextPlayer() to determine whether the first player can act  */
+		return nextPlayer(game, game.firstPlayer[round] + game.numPlayers - 1);
+	}
 //	public Object flopClone(){
 //		GameState object = null; // = new GameState();
 //		try {
@@ -495,6 +600,100 @@ public class GameState implements IGame, Cloneable {
 //		return object;
 //	}
 //	
+	
+	public int printStateCommon(Game game, int maxLen, StringBuilder strb) {
+		int c, r;
+		// Header
+		c = 0;
+		
+		// Header:handId:
+		r = strb.append(":").length();
+		if (r < 0) {
+			return -1;
+		}
+		c += r;
+		
+		/* HEADER:handId:betting */
+		r = printBetting(game,maxLen - c, strb);
+		if (r < 0)  {
+			return -1;
+		}
+		c += r;
+
+		/* HEADER:handId:betting: */
+		if (c >= maxLen) {
+			return -1;
+		}
+		strb.append(':');
+		++c;
+		return c;
+	}
+	
+	
+	
+	
+	public int printBetting(Game game, int maxLen, StringBuilder strb) {
+		int i, a, c, r = -1;
+		// c is the len of strb
+		c = 0;
+		for (i = 0; i <= round; ++ i) {
+			if (i != 0) {
+				if (c >= maxLen) {
+					return -1;
+				}
+				strb.append('/');
+				c ++;
+			}
+			
+			// print betting for round
+			for (a = 0; a < numActions[i]; ++ a) {
+				r = printAction(game, action[i][a], maxLen - c, strb);
+				
+				if (r < 0) {
+					return -1;
+				}
+				c += r;
+			}
+			
+			if (r < 0) {
+				return -1;
+			}
+			c += r;
+		}
+		
+		if (c >= maxLen) {
+			return -1;
+		}
+		return c;
+	}
+	
+	
+	public int printAction(Game game, ActionType action, int maxLen, StringBuilder strb) {
+		int c, r;
+		
+		if (maxLen == 0) {
+			return -1;
+		}
+		
+		c = 0;
+
+		strb.append(action.getType());
+		++c;
+		
+		if (game.bettingType && action.getType() == 'r') {
+			r = strb.append(action.getSize()).length();
+			if (r < 0) {
+				return -1;
+			}
+			c += r;
+		}
+		
+		if (c >= maxLen) {
+			return -1;
+		}
+		
+		return c;
+	}
 	
 	public Object clone() {
 

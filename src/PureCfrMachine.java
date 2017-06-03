@@ -5,6 +5,7 @@ public class PureCfrMachine implements IGame{
 	protected AbstractGame ag;
 	protected Entries[] regrets = new Entries[MAX_ROUNDS];
 	protected Entries[] avgStrategy = new Entries[MAX_ROUNDS];
+	protected CardSet cardSet = new CardSet();
 	
 	public PureCfrMachine() {
 		/* count up the number of entries required per round to store regret,
@@ -36,8 +37,9 @@ public class PureCfrMachine implements IGame{
 	/**
 	 * 开始迭代计算regret TODO 参数 rng_state_t
 	 */
-	public void doIteration() {
+	public void doIteration(Game game) {
 		Hand hand = new Hand();
+		generateHand(game, hand);
 		//TODO Generate Hand
 		for (int p = 0;p < MAX_PLAYERS; ++p) {
 			walkPureCfr(p, ag.bettingTreeRoot, hand);
@@ -112,9 +114,9 @@ public class PureCfrMachine implements IGame{
 	
 	
 	
-	protected int generateHand(Hand hand) {
+	protected int generateHand(Game game, Hand hand) {
 		GameState state = new GameState();
-		// dealcard TODO 发牌，放到GameState里面去
+		state.dealCards(game, state);
 		
 		// TODO bucket the hand for each player
 		
@@ -126,8 +128,7 @@ public class PureCfrMachine implements IGame{
 		 /* State must be in the final round for rankHand to work properly */
 		state.setRound(MAX_ROUNDS - 1);
 		for (int p = 0; p < MAX_PLAYERS; ++p) {
-//			ranks[p] = rankHand(state); TODO rank hand
-			ranks[p] = 1;
+			ranks[p] = state.rankHand(game, p); //TODO test`
 			if (ranks[p] > topRank) {
 				topRank = ranks[p];
 				numTies = 1;
