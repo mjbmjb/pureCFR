@@ -9,6 +9,9 @@ public class PureCfrPlayer implements IGame {
 	public PureCfrPlayer() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static int readMatchState()
+	
 
 	public static void main(String args[]) {
 		// Print usage
@@ -29,9 +32,9 @@ public class PureCfrPlayer implements IGame {
 				OutputStream out = s.getOutputStream();
 				if (in == null || out == null) {
 					MyUtil.prl("ERROR: could not get socket streams");
-					return 1;
+					return ;
 				}
-				
+				//TODO
 				
 			}
 		} catch (IOException e) {
