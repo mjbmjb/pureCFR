@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class Entries {
 	protected int numEntriesPerBucket;
 	protected int totalNumEntries;
-	protected double[] entries;//entries ÊÇdoubleÀàĞÍµÄ£¬¿¼ÂÇ¸ÄÎª·ºĞÍ
+	protected double[] entries;//entries æ˜¯doubleç±»å‹çš„ï¼Œè€ƒè™‘æ”¹ä¸ºæ³›å‹
 	protected boolean wasLoaded = false;
 	
 	public Entries(int numEntriesPerBucket, int totalNumEntries) {
@@ -27,9 +27,9 @@ public class Entries {
 	public double getPosValue(int bucket,
 						   int solnIdx,
 						   int numChoices,
-						   double[] values) { //TODO posValueÊÇ·ñĞŞ¸Ä
+						   double[] values) { //TODO posValueæ˜¯å¦ä¿®æ”¹
 		int baseIndex = getEntriesIndex(bucket, solnIdx);
-		/* Entry ÊÇdoubleÀàĞÍµÄ */
+		/* Entry æ˜¯doubleç±»å‹çš„ */
 		double[] localEntries = Arrays.copyOfRange(this.entries, baseIndex, numChoices + baseIndex);
 		double sumValue = 0.0;
 		for(int c = 0; c < numChoices; ++c) {
@@ -45,7 +45,7 @@ public class Entries {
 	 * 
 	 * @param bucket
 	 * @param solnIdx
-	 * @param numChoices ¿ÉÑ¡ÔñµÄchance node ?
+	 * @param numChoices å¯é€‰æ‹©çš„chance node ?
 	 * @param values
 	 * @param retval
 	 */
@@ -58,7 +58,7 @@ public class Entries {
 		for (int c = 0; c < numChoices; ++c) {
 			double diff = values[c] - retval;
 			double newRegret = this.entries[c + baseIndex] + diff;
-			/* Only update regret if no overflow occurs £¨¸ã²»¶®...£©*/
+			/* Only update regret if no overflow occurs ï¼ˆæä¸æ‡‚...ï¼‰*/
 			if (((diff < 0) && (newRegret < this.entries[c + baseIndex])) || ((diff > 0) && (newRegret > this.entries[c + baseIndex])))
 				this.entries[c + baseIndex] = newRegret;
 		}
@@ -67,7 +67,7 @@ public class Entries {
 	 * 
 	 * @param bucket
 	 * @param solnIdx
-	 * @param choice µÚ¼¸¸öaction
+	 * @param choice ç¬¬å‡ ä¸ªaction
 	 * @return
 	 */
 	public boolean incrementEntry(int bucket, int solnIdx, int choice) {
@@ -89,20 +89,20 @@ public class Entries {
 			return true;
 		}		 
 		/* First, load the type and double-check that it matches */
-		//¶ş½øÖÆ¶ÁÈ¡ÎÄ¼ş
+		//äºŒè¿›åˆ¶è¯»å–æ–‡ä»¶
 		DataInputStream din = new DataInputStream(new FileInputStream(file));
 
-		//ÓÃarraylist¶¯Ì¬¶ÁÈ¡ÎÄ¼şÀïµÄentries£¬»ØÍ·×ªÎªdouble[]
+		//ç”¨arrayliståŠ¨æ€è¯»å–æ–‡ä»¶é‡Œçš„entriesï¼Œå›å¤´è½¬ä¸ºdouble[]
 		//ArrayList<Double> entriesList = new ArrayList<Double>();
 		
-		//index Îª¼ÆÊıºÍË÷Òı
+		//index ä¸ºè®¡æ•°å’Œç´¢å¼•
 		int index = 0;
-		//Èç¹û¶Áµ½½áÎ²
+		//å¦‚æœè¯»åˆ°ç»“å°¾
 		while (din.available() > 0) {
 			this.entries[index ++] = din.readDouble();
 		}
 		
-		//Ã»¶ÁÍê
+		//æ²¡è¯»å®Œ
 		if (index + 1 != totalNumEntries) {
 			System.out.println("error while loading ; only read" + (index + 1) + "of" + totalNumEntries + "entries");
 			din.close();

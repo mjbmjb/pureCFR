@@ -16,9 +16,9 @@ public class PureCfrMachine implements IGame{
 		ag = new AbstractGame();
 		ag.countEntries(numEntriesPerBucket, totalNumEntries);
 		
-		// ³õÊ¼»¯ regret ºÍ avg strategy
+		// åˆå§‹åŒ– regret å’Œ avg strategy
 		for (int r = 0; r < MAX_ROUNDS; ++r) {
-			if (r < MAX_ROUNDS) {// TODO ´Ë´¦Ó¦ÎªÊµ¼ÊÓÎÏ·µÄroundÊı
+			if (r < MAX_ROUNDS) {// TODO æ­¤å¤„åº”ä¸ºå®é™…æ¸¸æˆçš„roundæ•°
 				// regret
 				regrets[r] = new Entries(numEntriesPerBucket[r], totalNumEntries[r]);
 				
@@ -35,7 +35,7 @@ public class PureCfrMachine implements IGame{
 	}
 
 	/**
-	 * ¿ªÊ¼µü´ú¼ÆËãregret TODO ²ÎÊı rng_state_t
+	 * å¼€å§‹è¿­ä»£è®¡ç®—regret TODO å‚æ•° rng_state_t
 	 */
 	public void doIteration(Game game) {
 		Hand hand = new Hand();
@@ -159,7 +159,7 @@ public class PureCfrMachine implements IGame{
 	
 	protected double walkPureCfr(int position, BettingNode curNode, Hand hand) {
 		double retval = 0.0;
-		// µ±ÎªTerminal node »òÕß Íæ¼Ò fold ÓÎÏ·½áÊø£¬¼ÆËãutility
+		// å½“ä¸ºTerminal node æˆ–è€… ç©å®¶ fold æ¸¸æˆç»“æŸï¼Œè®¡ç®—utility
 		if (curNode.getChild() == null || curNode.didPlayerFold(position)) {
 			retval = curNode.evaluate(hand, position);
 			return retval;
@@ -187,7 +187,7 @@ public class PureCfrMachine implements IGame{
 			}
 		}
 		
-		// Ëæ»úÑ¡È¡action
+		// éšæœºé€‰å–action
 		java.util.Random r = new java.util.Random();
 		double dart = r.nextDouble() * sumPosRegret;
 		int choice;
@@ -207,7 +207,7 @@ public class PureCfrMachine implements IGame{
 			// Opponment's node Recurse down the single choice
 			// line 9
 			for (int c = 0;c < choice; ++c) {
-				// Ñ¡ÖĞÄÇ¸öaction¶ÔÓ¦µÄ node
+				// é€‰ä¸­é‚£ä¸ªactionå¯¹åº”çš„ node
 				child = child.getSibling();
 			}
 			retval = walkPureCfr(position, child, hand);

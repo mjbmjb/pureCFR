@@ -13,7 +13,7 @@ public class NullCardAbstraction extends CardAbstarction implements IGame{
 		}
 		for (int r = 0; r < MAX_ROUNDS; ++r) {
 			if (r < game.numRounds) {
-				//ºóÒ»ÂÖ¶¼ÊÇ   Ç°Ò»ÂÖµÄ  ^ ¹«¹²ÅÆÊýÁ¿
+				//åŽä¸€è½®éƒ½æ˜¯   å‰ä¸€è½®çš„  ^ å…¬å…±ç‰Œæ•°é‡
 				if (r > 0) {
 					mNumBuckets[r] = mNumBuckets[r - 1];
 				}

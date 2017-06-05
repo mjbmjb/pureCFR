@@ -27,8 +27,8 @@ public class AbstractGame implements IGame{
 		// TODO Auto-generated constructor stub
 	}
 	/**
-	 * µİ¹éµÄ¸üĞÂentryµÄÊıÄ¿£¬±»ÓÃÓÚcountEntries
-	 * @param node : µ±Ç°µÄnode
+	 * é€’å½’çš„æ›´æ–°entryçš„æ•°ç›®ï¼Œè¢«ç”¨äºcountEntries
+	 * @param node : å½“å‰çš„node
 	 * @param numEntriesPerBucket
 	 * @param totalNumEntries
 	 */
@@ -49,7 +49,7 @@ public class AbstractGame implements IGame{
 		int buckets = cardAbs.numBucket(game, node);
 		totalNumEntries[round] += buckets * numChoices;
 		
-		// Recurse µİ¹éµÄÕÒsibling£¬¸üĞÂtotalNumEntriesÖĞ¼ÇÂ¼µÄentry µÄÊıÄ¿
+		// Recurse é€’å½’çš„æ‰¾siblingï¼Œæ›´æ–°totalNumEntriesä¸­è®°å½•çš„entry çš„æ•°ç›®
 		for (int c = 0; c < numChoices; ++c) {
 			countEntriesR(child, numEntriesPerBucket, totalNumEntries);
 			child = child.getSibling();

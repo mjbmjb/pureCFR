@@ -528,7 +528,7 @@ public class GameState implements IGame, Cloneable {
 		do {
 			n = (n + 1) % game.numPlayers;
 		}while (playerFolded[n] || spent[n] >= game.stack[n]);
-		//µ±fold»òÕß³ïÂëÓÃÍêÊ±Ìø¹ı¸ÃÍæ¼Ò
+		//å½“foldæˆ–è€…ç­¹ç ç”¨å®Œæ—¶è·³è¿‡è¯¥ç©å®¶
 		
 		return n;
 	}
@@ -600,6 +600,96 @@ public class GameState implements IGame, Cloneable {
 //		return object;
 //	}
 //	
+	public boolean readAction(Game game, String str, ActionType action) {
+		action.setType(str.charAt(0));
+		
+		if (action.getType() == 'r' && game.bettingType) {
+			//TODO no limit bet/raise need to read a size
+			
+			
+		}
+		else {
+			action.setSize(0);
+		}
+		return true;
+	}
+	
+	
+	public boolean readBetting(Game game, String str) {
+		ActionType action = new ActionType('n', 0);
+		
+		while(true) {
+			// If there is no betting
+			if(str.length() == 0) {
+				break;
+			}
+			
+			/* ignore / character */
+			if (str.charAt(0) == '/') {
+				str = str.substring(1,str.length());
+			}
+			
+			if(!readAction(game, str, action))
+				return false;
+			
+			if(!isValidAction(game, action))
+				return false;
+			
+			doAction(game, action);
+		}
+		
+		return true;
+	}
+
+	public boolean readCard(String str, int[] card) {
+		
+	}
+	
+	public boolean readCards(String str, int maxCards, int[] cards, )
+	
+	
+	public boolean readHoleCards(Game game, String str) {
+		int p;
+		
+		for (p = 0)
+	}
+	
+	/**
+	 * Assum the input string is 
+	 * @param str
+	 * @param game
+	 * @return
+	 */
+	public boolean readStateCommon(String str, Game game) {
+		int handId;
+		int c, r;
+		
+		// HEADER
+		c = 0;
+		
+		/* HEADER:handId: */
+		String[] strList = str.split(":");
+		MyUtil.prl("(readStateCommon)The split str is:");
+		for (String string : strList) {
+			MyUtil.pr(string + " ");
+		}
+		
+		handId = Integer.parseInt(strList[1]);
+		
+		/* HEADER:handId:betting: */
+		if(!readBetting(game, strList[2]))
+			return false;
+		
+		/* HEADER:handId:betting:holeCards */
+		if(!readHoleCards(strList[3]))
+			return false;
+		
+		if(!readBoardCards(strList[4])) 
+			return false;
+		
+		return true;
+	}
+	
 	
 	public int printStateCommon(Game game, int maxLen, StringBuilder strb) {
 		int c, r;

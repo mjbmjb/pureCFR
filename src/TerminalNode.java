@@ -17,7 +17,7 @@ public class TerminalNode extends BettingNode {
 		this.fold_value[1] = fold_value[1];
 	}
 	/*
-	 * ¼ÆËãutility
+	 * è®¡ç®—utility
 	 */
 	@Override
 	public int evaluate(Hand hand, int position) {

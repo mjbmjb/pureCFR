@@ -44,7 +44,7 @@ public class BettingNode implements IGame{
 	}
 
 	/**
-	 * ¼ÆËãutility
+	 * è®¡ç®—utility
 	 * @param hand
 	 * @param position
 	 * @return

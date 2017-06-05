@@ -39,9 +39,9 @@ public class PureCfr implements IGame {
 		
 		/* Keep track of the last time we dumped a checkpoint */
 		
-		// Ê¡ÂÔÁËdumpÀï¶ÁÊ±¼äµÄ²½Öè£¬Ö±½ÓÒ»´ÎÑµÁ·
+		// çœç•¥äº†dumpé‡Œè¯»æ—¶é—´çš„æ­¥éª¤ï¼Œç›´æ¥ä¸€æ¬¡è®­ç»ƒ
 		
-		// ¿ªÊ¼¹¤×÷£¬ÏÈ¼ÇÂ¼Ò»ÏÂdump time £¬Ã¿´Îdumpºó¸üĞÂ
+		// å¼€å§‹å·¥ä½œï¼Œå…ˆè®°å½•ä¸€ä¸‹dump time ï¼Œæ¯æ¬¡dumpåæ›´æ–°
 		long dumpStartTime = System.currentTimeMillis();
 		
 		//count loop
@@ -52,7 +52,7 @@ public class PureCfr implements IGame {
 			long curTime = System.currentTimeMillis();
 			
 			// compute work time 
-			//ÔİÇÒÎªcurtime£¬µÈ¼ÓÈëÏß³ÌÖ®ºóÔÙĞŞ¸Ä
+			//æš‚ä¸”ä¸ºcurtimeï¼Œç­‰åŠ å…¥çº¿ç¨‹ä¹‹åå†ä¿®æ”¹
 			long workTime = curTime;
 			
 			// pcm iterations

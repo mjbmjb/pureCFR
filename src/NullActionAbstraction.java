@@ -9,10 +9,10 @@ public class NullActionAbstraction extends ActionAbstraction{
 		char[] actionType = {'c', 'f', 'r'};
 		int[] raiseSize = new int[2];
 //		for (int a = 0; a < MAX_ABSTRACT_ACTIONS; ++a) {
-//			//Ö»ÓÐÈýÖÖ c r f
+//			//åªæœ‰ä¸‰ç§ c r f
 //			ActionType newAction = new ActionType(actionType[a], 0);
 //			if (actionType[a] == 'r' ) {
-//				//µ±Ê±raise µÄÊ±ºò£¬¼ì²éraiseµÄÊÇ·ñºÏÀí£¨ÊÇ·ñ³¬³öÊ£Óà³ïÂë£©
+//				//å½“æ—¶raise çš„æ—¶å€™ï¼Œæ£€æŸ¥raiseçš„æ˜¯å¦åˆç†ï¼ˆæ˜¯å¦è¶…å‡ºå‰©ä½™ç­¹ç ï¼‰
 //				if (!state.raiseIsValid(raiseSize)) {
 //					break;
 //				}
@@ -20,23 +20,23 @@ public class NullActionAbstraction extends ActionAbstraction{
 //				numOfAction ++;
 //			}
 //			else if (state.isValidAction(newAction)) {
-//				actions[a] = newAction;//TODO ÊÇ²»ÊÇÒªÉèÎªÆäËûÖµ£¿ 
+//				actions[a] = newAction;//TODO æ˜¯ä¸æ˜¯è¦è®¾ä¸ºå…¶ä»–å€¼ï¼Ÿ 
 //				numOfAction ++;
 //			}
 //	
 //		}
 		for (char a : actionType) {
-			//Ö»ÓÐÈýÖÖ c r f
+			//åªæœ‰ä¸‰ç§ c r f
 			ActionType newAction = new ActionType(a, 0);
 			if (a == 'r' ) {
-				//µ±Ê±raise µÄÊ±ºò£¬¼ì²éraiseµÄÊÇ·ñºÏÀí£¨ÊÇ·ñ³¬³öÊ£Óà³ïÂë£©
+				//å½“æ—¶raise çš„æ—¶å€™ï¼Œæ£€æŸ¥raiseçš„æ˜¯å¦åˆç†ï¼ˆæ˜¯å¦è¶…å‡ºå‰©ä½™ç­¹ç ï¼‰
 				if (!state.raiseIsValid(raiseSize)) {
 					break;
 				}
 				actions[numOfAction ++] = new ActionType(a,RAISE_SIZE);
 			}
 			else if (state.isValidAction(game, newAction)) {
-			actions[numOfAction ++] = newAction;//TODO ÊÇ²»ÊÇÒªÉèÎªÆäËûÖµ£¿ 
+			actions[numOfAction ++] = newAction;//TODO æ˜¯ä¸æ˜¯è¦è®¾ä¸ºå…¶ä»–å€¼ï¼Ÿ 
 			}
 		}
 		assert(actions[numOfAction - 1] != null);
