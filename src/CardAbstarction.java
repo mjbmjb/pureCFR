@@ -8,13 +8,13 @@ public class CardAbstarction implements IGame {
 	public int numBucket(Game game, BettingNode node) {
 		return 0;
 	}
-	public int getBucket(BettingNode node, int[] boardCards, int[][] holeCards) {
+	public int getBucket(Game game, BettingNode node, int[] boardCards, int[][] holeCards) {
 		return 0;
 	}
-	public boolean canPrecomputeBucket(BettingNode node) {
+	public boolean canPrecomputeBuckets() {
 		return false; 
 	}
-	public void precomputeBuckets(Hand hand) {
+	public void precomputeBuckets(Game game, Hand hand) {
 		
 	}
 }
