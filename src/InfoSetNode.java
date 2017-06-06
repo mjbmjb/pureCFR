@@ -1,10 +1,10 @@
 
 public class InfoSetNode extends BettingNode implements IGame{
-	protected  final int solnIdx;
-	protected  final int numChoices;
-	protected  final int player;
-	protected  final int round;
-	protected  final BettingNode child;
+	protected  int solnIdx;
+	protected  int numChoices;
+	protected  int player;
+	protected  int round;
+	protected  BettingNode child;
 		
 	public InfoSetNode(int newSolnIdx,
 					   int newNumChoice,
