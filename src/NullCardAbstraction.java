@@ -1,5 +1,5 @@
 
-public class NullCardAbstraction extends CardAbstarction implements IGame{
+public class NullCardAbstraction extends CardAbstarction {
 	protected int deckSize;
 	protected int[] mNumBuckets = new int[MAX_ROUNDS];
 	
@@ -37,22 +37,40 @@ public class NullCardAbstraction extends CardAbstarction implements IGame{
 		return mNumBuckets[state.getRound()];
 	}
 
-//	@Override
-//	public int getBucketInternal(Game game, 
-//								 int boardCard[], 
-//								 int holeCard[], 
-//								 int player, 
-//								 int round) {
-//		/* Calculate the unique bucket number for this hand */
-//		int bucket = 0;
-//		for (int i = 0;i < game.numHoleCards; ++i) {
-//			if (i > 0) {
-//				bucket *= deckSize;
-//			}
-//		}
-//	}
-//	
-//	
+	public int getBucketInternal(Game game, 
+								 int[] boardCard, 
+								 int[][] holeCard, 
+								 int player, 
+								 int round) {
+		/* Calculate the unique bucket number for this hand */
+		int bucket = 0;
+		for (int i = 0;i < game.numHoleCards; ++i) {
+			if (i > 0) {
+				bucket *= deckSize;
+			}
+			
+			int card = holeCard[player][i];
+			bucket += card;
+		}
+		
+		for (int r = 0; r <= round; ++r) {
+			for (int i = game.bcStart(r); i < game.sumBoardCards(r); ++i) {
+				bucket *= deckSize;
+				int card = boardCard[i];
+				bucket += card;
+			}
+		}
+		return bucket;
+	}
+	
+	@Override
+	public int getBucket(Game game, BettingNode node,
+					 int[] boardCards, int[][] holeCards) {
+		return getBucketInternal(game, boardCards, holeCards, 
+							     node.getPlayer(), node.getRound());
+	}
+	
+	
 	
 
 }
