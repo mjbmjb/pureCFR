@@ -153,7 +153,7 @@ public class PlayerModule implements IGame{
 		
 		/* Bucket the cards */
 		  if (bucket == -1) {
-		    bucket = ag.cardAbs.getBucket(node, state.boardCards, state.holeCards);
+		    bucket = ag.cardAbs.getBucket(ag.game, node, state.boardCards, state.holeCards);
 		  }
 		  if (verbose)	{
 			  MyUtil.prl(" Bucket=" + bucket);
