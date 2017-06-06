@@ -119,6 +119,11 @@ public class PureCfrMachine implements IGame{
 		state.dealCards(game, state);
 		
 		// TODO bucket the hand for each player
+	
+		/* Bucket the hands for each player, round if possible */
+		if (ag.cardAbs.canPrecomputeBuckets()) {
+			ag.cardAbs.precomputeBuckets(ag.game, hand);
+		}
 		
 		// Rank the hands
 		int[] ranks = new int[MAX_PLAYERS];
@@ -170,11 +175,15 @@ public class PureCfrMachine implements IGame{
 		int player = curNode.getPlayer();
 		int round = curNode.getRound();
 		int solnIdx = curNode.getSolnIdx();
-		// TODO precomputer bucket
 		
 		int bucket;
-		bucket = ag.cardAbs.getBucket(curNode, hand.board_cards,hand.hole_cards);
 		
+		if (ag.cardAbs.canPrecomputeBuckets()) {
+			bucket = hand.precomputedBuckets[player][round];
+		}
+		else {
+			bucket = ag.cardAbs.getBucket(ag.game, curNode, hand.board_cards,hand.hole_cards);
+		}
 		/* Get the positive regrets at this information set */
 		double[] posRegrets = new double[numChoices];
 		double sumPosRegret = regrets[round].getPosValue(bucket, solnIdx, numChoices, posRegrets);
