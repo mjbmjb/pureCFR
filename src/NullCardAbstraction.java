@@ -69,8 +69,21 @@ public class NullCardAbstraction extends CardAbstarction {
 		return getBucketInternal(game, boardCards, holeCards, 
 							     node.getPlayer(), node.getRound());
 	}
+
+	@Override
+	public boolean canPrecomputeBuckets() {
+		return true; 
+	}	
 	
-	
-	
+	@Override
+	public void precomputeBuckets(Game game, Hand hand) {
+		for (int p = 0; p < game.numPlayers; ++ p) {
+			for (int r = 0; r < game.numRounds; ++ r) {
+				hand.precomputedBuckets[p][r] = getBucketInternal(game, hand.board_cards, 
+																  hand.hole_cards, p, r);
+			}
+		}
+	}
+
 
 }
