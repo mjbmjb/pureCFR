@@ -42,5 +42,33 @@ public class Game implements IGame {
 		  
 		  // betting type unlimit=1 limit = 0
 		  public boolean bettingType = false;
+		  
+		  /**
+		   * 找出round对应的第一个borad card 的位置
+		   * @param round
+		   * @return 第一个borad card的位置
+		   */
+		  public int bcStart(int round) {
+			  int r;
+			  int start = 0;
+			  for (r = 0; r < round; ++ r) {
+				  start += numBoardCards[r];
+			  }
+			  return start;
+		  }
+		  
+		  /**
+		   * 
+		   * @param round
+		   * @return 到round（包括） 为止的公共牌数目
+		   */
+		  public int sumBoardCards(int round) {
+			  int r;
+			  int total = 0;
+			  for (r = 0; r <= round; ++ r) {
+				  total += numBoardCards[r];
+			  }
+			  return total;
+		  }
 	
 }
