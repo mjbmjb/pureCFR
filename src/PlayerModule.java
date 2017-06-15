@@ -9,7 +9,7 @@ public class PlayerModule implements IGame{
 	protected boolean verbose;
 	protected Entries[] entries;
 	public PlayerModule(File file) {
-		this.verbose = false;
+		this.verbose = true;
 		
 		/* Open up the player file for reading */
 		

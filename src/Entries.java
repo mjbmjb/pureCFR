@@ -25,9 +25,9 @@ public class Entries {
 	}
 	/* Returns the sum of all pos_values in the returned pos_values array */	
 	public double getPosValue(int bucket,
-						   int solnIdx,
-						   int numChoices,
-						   double[] values) { //TODO posValue是否修改
+						      int solnIdx,
+						      int numChoices,
+						      double[] values) { //TODO posValue是否修改
 		int baseIndex = getEntriesIndex(bucket, solnIdx);
 		/* Entry 是double类型的 */
 		double[] localEntries = Arrays.copyOfRange(this.entries, baseIndex, numChoices + baseIndex);

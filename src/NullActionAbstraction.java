@@ -30,7 +30,7 @@ public class NullActionAbstraction extends ActionAbstraction{
 			ActionType newAction = new ActionType(a, 0);
 			if (a == 'r' ) {
 				//当时raise 的时候，检查raise的是否合理（是否超出剩余筹码）
-				if (!state.raiseIsValid(raiseSize)) {
+				if (!state.raiseIsValid(game, raiseSize)) {
 					break;
 				}
 				actions[numOfAction ++] = new ActionType(a,RAISE_SIZE);

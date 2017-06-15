@@ -4,6 +4,9 @@ public class Game implements IGame {
 	public Game() {
 		stack[0] = 1000;
 		stack[1] = 1000;
+		
+		blind[0] = SMALL_BLIND;
+		blind[1] = BIG_BLIND;
 	}
 		  /* stack sizes for each player */
 		  public int[] stack = new int[ MAX_PLAYERS ];
@@ -28,7 +31,7 @@ public class Game implements IGame {
 		  public int[] firstPlayer = new int[ MAX_ROUNDS ];
 
 		  /* number of bets/raises that may be made in each round */
-		  public int[] maxRaises = new int[ MAX_ROUNDS ];
+		  public int[] maxRaises = {1,1,1,1};
 
 		  /* number of suits and ranks in the deck of cards */
 		  public int numSuits = 1;

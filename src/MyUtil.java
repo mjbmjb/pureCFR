@@ -13,15 +13,7 @@ public  class MyUtil implements IGame{
 		System.out.println(str);
 	}
 	
-	public String printState(Game game, GameState state, int maxLen) {
-		int c, r;
-		
-		c = 0;
-		
-		// STATE
-		
-	}
-	
+
 	public static void printStrategtyR(PlayerModule playerModule,
 								  GameState state,
 								  AbstractGame ag,

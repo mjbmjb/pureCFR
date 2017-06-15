@@ -93,7 +93,7 @@ public class GameState implements IGame, Cloneable {
 		return roundIsOver[round];
 	}
 	
-	public void initState() {
+	public void initState(Game game) {
 		// round
 		round = 0;
 		// Action[r][i]
@@ -122,13 +122,33 @@ public class GameState implements IGame, Cloneable {
 		// playerFolded[p]
 
 		Arrays.fill(playerFolded, false);
+		
 		// spent[p]
+		maxSpent = 0;
 		for (int p = 0; p < MAX_PLAYERS; p++) {
 			spent[0] = BIG_BLIND;
 			spent[1] = SMALL_BLIND;
 		}
-		maxSpent = BIG_BLIND;
-		minNoLimitRaiseTo = maxSpent * 2;
+		maxSpent = (BIG_BLIND > SMALL_BLIND) ? BIG_BLIND : SMALL_BLIND;
+		
+		if (game.bettingType) {
+			/* no-limit games need to keep track of the minimum bet */
+			if(maxSpent > 0) {
+				minNoLimitRaiseTo = maxSpent * 2;
+			}
+			else {
+				/* need to bet at least one chip, and there are no blinds/ante */
+				minNoLimitRaiseTo = 1;
+			}
+		}//no limit if end
+		else {
+			/* no need to worry about minimum raises outside of no-limit games */
+			 minNoLimitRaiseTo = 0;
+		}
+		
+		for (int p = 0; p <game.numPlayers; ++p) {
+			playerFolded[p] = false;
+		}		
 	}
 
 	public int[] getNumActions(){
@@ -301,6 +321,10 @@ public class GameState implements IGame, Cloneable {
 			if (getMaxSpent() + game.raiseSize[getRound()] > game.stack[p]) {
 				setMaxSpent(game.stack[p]);
 			}
+			else {
+				/* player raises by the normal limit size */
+				setMaxSpent(getMaxSpent() + game.raiseSize[round]);
+			}
 			spent[p] = getMaxSpent();
 			break;
 		}
@@ -312,7 +336,7 @@ public class GameState implements IGame, Cloneable {
 			/* >= 2 non-folded players, all acting players have called */
 			if (numActingPlayers() > 1) {
 				/* there are at least 2 acting players */
-				if (round + 1 < MAX_ROUNDS) {
+				if (round + 1 < game.numRounds) {
 					/* active players move onto next round */
 //					switch (round) {
 //					case 0:
@@ -358,20 +382,32 @@ public class GameState implements IGame, Cloneable {
 				 * showdown
 				 */
 				finished = true;
-				round = MAX_ROUNDS - 1;
-			}
-		} else if (numRaises() >= MAX_REISE_NUM[getRound()]){
-			//num of raise reach the limitation
-			if (round + 1 < MAX_ROUNDS) {
-				++ round;
-				}
-			else {
-				finished = true;
+				round = game.numRounds - 1;
 			}
 		}
+//		else if (numRaises() >= MAX_REISE_NUM[getRound()]){
+//			//num of raise reach the limitation
+//			if (round + 1 < MAX_ROUNDS) {
+//				++ round;
+//				}
+//			else {
+//				finished = true;
+//			}
+//		}
 	}
 
-	public boolean raiseIsValid(int[] raiseSize) {
+	public boolean raiseIsValid(Game game, int[] raiseSize) {
+		
+		if (numRaises() >= game.maxRaises[round]) {
+			return false;
+		}
+		
+		if (numActions[round] + game.numPlayers > MAX_NUM_ACTIONS) {
+			/* 1 raise + NUM PLAYERS-1 calls is too many actions */
+			MyUtil.prl("WARNING: #actions in round is too close to MAX_NUM_ACTIONS, forcing call/fold");
+			return false;
+		}
+		
 		if (numActingPlayers() <= 1) {
 			/*
 			 * last remaining player can't bet if there's no one left to call
@@ -416,7 +452,7 @@ public class GameState implements IGame, Cloneable {
 		}
 		p = currentPlayer();
 		if (action.getType() == 'r') {
-			if (!raiseIsValid(raiseSize)) {
+			if (!raiseIsValid(game, raiseSize)) {
 				return false;
 			}
 			if (game.bettingType) {
@@ -482,6 +518,7 @@ public class GameState implements IGame, Cloneable {
     			--numCards;
     	    }
     	}
+    	return;
     }
     
     public int sumBoardCards(Game game, int round) {
@@ -498,7 +535,7 @@ public class GameState implements IGame, Cloneable {
     
     public int rankOfCard(Game game, int card) {
     	return card / game.numSuits;
-    }
+    }//TODO 放到Game 里
     
 	public int rankHand(Game game, int player) {
 		int i;
@@ -641,18 +678,18 @@ public class GameState implements IGame, Cloneable {
 		return true;
 	}
 
-	public boolean readCard(String str, int[] card) {
-		
-	}
-	
-	public boolean readCards(String str, int maxCards, int[] cards, )
-	
-	
-	public boolean readHoleCards(Game game, String str) {
-		int p;
-		
-		for (p = 0)
-	}
+//	public boolean readCard(String str, int[] card) {
+//		
+//	}
+//	
+//	public boolean readCards(String str, int maxCards, int[] cards, )
+//	
+//	
+//	public boolean readHoleCards(Game game, String str) {
+//		int p;
+//		
+//		for (p = 0)
+//	}
 	
 	/**
 	 * Assum the input string is 
@@ -681,11 +718,11 @@ public class GameState implements IGame, Cloneable {
 			return false;
 		
 		/* HEADER:handId:betting:holeCards */
-		if(!readHoleCards(strList[3]))
-			return false;
-		
-		if(!readBoardCards(strList[4])) 
-			return false;
+//		if(!readHoleCards(strList[3]))
+//			return false;
+//		
+//		if(!readBoardCards(strList[4])) 
+//			return false;
 		
 		return true;
 	}

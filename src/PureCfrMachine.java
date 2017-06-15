@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Arrays;
 
 
 public class PureCfrMachine implements IGame{
@@ -52,7 +53,7 @@ public class PureCfrMachine implements IGame{
 		File filer = new File(filenamer);
 		
 		try {
-			for (int r = 0;r < MAX_ROUNDS; ++r) {
+			for (int r = 0;r < ag.game.numRounds; ++r) {
 				if (regrets[r].write(filer)) {
 					System.out.println("(write)Error while dumping round" + r + "to file" + filenamer);
 					return true;
@@ -117,6 +118,10 @@ public class PureCfrMachine implements IGame{
 	protected int generateHand(Game game, Hand hand) {
 		GameState state = new GameState();
 		state.dealCards(game, state);
+		
+		hand.hole_cards = Arrays.copyOf(state.holeCards, state.holeCards.length);
+		hand.board_cards = Arrays.copyOf(state.boardCards, state.boardCards.length);
+		
 		
 		// TODO bucket the hand for each player
 	

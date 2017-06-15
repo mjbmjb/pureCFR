@@ -4,7 +4,7 @@ public class TerminalNode extends BettingNode {
 	static int num_choices;
     static int player;
     static int round;
-    BettingNode child;
+    BettingNode child = null;
     
     boolean showdown; /* 0 = end by folding, 1 = end in showdown */
     int[] fold_value = new int[ 2 ]; /* (-1,1) if end by folding and (lose,win), 0 for showdown */
