@@ -7,7 +7,7 @@ import java.util.Random;
 public class PlayerModule implements IGame{
 	protected AbstractGame ag;
 	protected boolean verbose;
-	protected Entries[] entries;
+	protected Entries[] entries = new Entries[MAX_ROUNDS];
 	public PlayerModule(File file) {
 		this.verbose = true;
 		
@@ -81,6 +81,7 @@ public class PlayerModule implements IGame{
 		/* Find the current node from the sequence of actions in state */
 		BettingNode node = ag.bettingTreeRoot;
 		GameState oldState = new GameState();
+		oldState.initState(ag.game);
 		
 		if (verbose) {
 			MyUtil.prl("Tranlated abstract state:");
@@ -88,7 +89,7 @@ public class PlayerModule implements IGame{
 		}
 		
 		for (int r = 0; r <= state.getRound(); ++r) {
-			for (int a = 0; a <= state.numActions[r]; ++ a) {
+			for (int a = 0; a < state.numActions[r]; ++ a) {
 				ActionType realAction = state.getAction(r, a);
 				ActionType[] abstractAction = new ActionType[MAX_ABSTRACT_ACTIONS];
 				int numAction = ag.actionAbs.getActions(ag.game, oldState, abstractAction);
@@ -116,7 +117,7 @@ public class PlayerModule implements IGame{
 						}
 					}
 					
-					if (choice <= numAction) {
+					if (choice >= numAction) {
 						if (verbose) {
 							MyUtil.prl("Unable to translate action at round " + 
 										state.getRound() + 
@@ -188,7 +189,6 @@ public class PlayerModule implements IGame{
 			  }
 			  return;
 		  }
-		  actionProbs = new double[MAX_ABSTRACT_ACTIONS];
 		  for (int c = 0; c < numChoices; ++ c) {
 			  actionProbs[c] = posEntries[c] / sumPosEntries;
 		  }
@@ -231,7 +231,11 @@ public class PlayerModule implements IGame{
 				MyUtil.prl("Action chosen is not legal");
 			}
 		}
-		
+		//
+		if(actions[a].getType() == 'f') {
+			MyUtil.pr("r");
+		}
+		//
 		return actions[a];
 	}
 	

@@ -13,6 +13,9 @@ import java.util.Random;
 
 public class GameState implements IGame, Cloneable {
 
+	/* hand id*/
+	public int handID = 0;
+	
 	private final static int[] blind = { 100, 50 };
 
 	/* current round : preflop = 0; flop = 1; turn = 2; river = 3 */
@@ -40,7 +43,7 @@ public class GameState implements IGame, Cloneable {
 	public int[][] holeCards;
 
 	/* finished is true if and only if game is over */
-	private boolean finished;
+	public boolean finished;
 
 	/* playerFolded[ p ] is true if and only if player p has folded. */
 	private boolean[] playerFolded;
@@ -55,8 +58,10 @@ public class GameState implements IGame, Cloneable {
 	
 
 
-	private boolean [] roundIsOver; 
+	private boolean [] roundIsOver;
 	
+	public int viewingPlayer;
+
 	
 	
 	public GameState() {
@@ -326,6 +331,10 @@ public class GameState implements IGame, Cloneable {
 				setMaxSpent(getMaxSpent() + game.raiseSize[round]);
 			}
 			spent[p] = getMaxSpent();
+			break;
+		default:
+			// not the case above
+			MyUtil.prl("not a vaild action)");
 			break;
 		}
 		/* see if the round or game has ended */
@@ -655,44 +664,83 @@ public class GameState implements IGame, Cloneable {
 	public boolean readBetting(Game game, String str) {
 		ActionType action = new ActionType('n', 0);
 		
-		while(true) {
-			// If there is no betting
-			if(str.length() == 0) {
-				break;
+		// set action
+		// TODO no limit need a size
+		for (int c = 0; c < str.length(); ++ c) {
+			char actionChar = str.charAt(c);
+			if (actionChar == '/') {
+				continue;
 			}
-			
-			/* ignore / character */
-			if (str.charAt(0) == '/') {
-				str = str.substring(1,str.length());
-			}
-			
-			if(!readAction(game, str, action))
-				return false;
-			
+			action.setType(actionChar);
+			action.setSize(0);
 			if(!isValidAction(game, action))
 				return false;
-			
 			doAction(game, action);
 		}
-		
 		return true;
 	}
 
-//	public boolean readCard(String str, int[] card) {
-//		
-//	}
-//	
+	public int readCard(Game game, String cardStr) {
+		return game.rankType.indexOf(cardStr.substring(0, 1)) +
+			   game.suitType.indexOf(cardStr.substring(1)) * game.numRanks;
+	}
+	
 //	public boolean readCards(String str, int maxCards, int[] cards, )
 //	
 //	
-//	public boolean readHoleCards(Game game, String str) {
-//		int p;
-//		
-//		for (p = 0)
-//	}
+	public void readHoleCards(Game game, String str) {
+		int p = str.charAt(0) == '|' ? 1 : 0;
+		
+		String[] strArr = str.split("\\|");
+		
+
+		for (int c = 0; c < game.numHoleCards; ++ c) {
+			holeCards[p][c] = readCard(game, strArr[p]);
+		}
+	}
+	
+	
+	public int readBoardCards(Game game, String[] cardStrArr) {
+		int round;
+		for (round = 0; round < cardStrArr.length; ++ round) {
+			for (int n = 0; n < game.numBoardCards[round]; ++ n) {
+				holeCards[round][n] = readCard(game, cardStrArr[round + 1]);//cause the first item are hole cards
+			}
+		}
+		return round;
+	}
+	
+	
+	public boolean readState(String serverStr, Game game) {
+		// MATCHSTATE(0):position(1):handID(2):action(3):holeCards|/broadCards
+		String[] strArr = serverStr.split(":");
+		assert(strArr.length == 5);
+		
+		// read player position
+		viewingPlayer = Integer.parseInt(strArr[1]);
+		
+		// read handID
+		handID = Integer.parseInt(strArr[2]);
+		
+		// read betting
+		if (!readBetting(game, strArr[3])) {
+			return false;
+		}	
+		
+		// read cards
+		String[] cardStrArr = strArr[4].split("/");
+		// read hole cards
+		readHoleCards(game, cardStrArr[0]);
+		// read board cards
+		if (cardStrArr.length >= 2) {
+			readBoardCards(game, cardStrArr);
+		}
+		return true;
+	}
+	
 	
 	/**
-	 * Assum the input string is 
+	 * Assume the input string is 
 	 * @param str
 	 * @param game
 	 * @return
@@ -759,22 +807,19 @@ public class GameState implements IGame, Cloneable {
 	
 	
 	
-	public int printBetting(Game game, int maxLen, StringBuilder strb) {
+	public int printBetting(Game game, StringBuilder strb) {
 		int i, a, c, r = -1;
 		// c is the len of strb
 		c = 0;
 		for (i = 0; i <= round; ++ i) {
 			if (i != 0) {
-				if (c >= maxLen) {
-					return -1;
-				}
 				strb.append('/');
 				c ++;
 			}
 			
 			// print betting for round
 			for (a = 0; a < numActions[i]; ++ a) {
-				r = printAction(game, action[i][a], maxLen - c, strb);
+				r = printAction(game, action[i][a], strb);
 				
 				if (r < 0) {
 					return -1;
@@ -788,20 +833,17 @@ public class GameState implements IGame, Cloneable {
 			c += r;
 		}
 		
-		if (c >= maxLen) {
-			return -1;
-		}
 		return c;
 	}
 	
 	
-	public int printAction(Game game, ActionType action, int maxLen, StringBuilder strb) {
+	public int printAction(Game game, ActionType action,StringBuilder strb) {
 		int c, r;
 		
-		if (maxLen == 0) {
-			return -1;
-		}
-		
+//		if (maxLen == 0) {
+//			return -1;
+//		}
+//		
 		c = 0;
 
 		strb.append(action.getType());
@@ -815,12 +857,62 @@ public class GameState implements IGame, Cloneable {
 			c += r;
 		}
 		
-		if (c >= maxLen) {
-			return -1;
-		}
+//		if (c >= maxLen) {
+//			return -1;
+//		}
 		
 		return c;
 	}
+	
+	public void printCard(Game game, int card, StringBuilder sb) {
+		int suit = card / game.numRanks;
+		int rank = card % game.numRanks;
+		sb.append(game.rankType.charAt(rank) + game.suitType.charAt(suit));
+	}
+	
+	public void printHoleCards(Game game, StringBuilder sb) {
+		for(int p = 0;p < game.numPlayers; ++ p) {
+			if (p != 0) {
+				sb.append("|");
+			}
+			for (int c = 0; c < game.numHoleCards; ++ c) {
+				printCard(game, holeCards[p][c], sb);
+			}
+		}
+	}
+	
+	public void printBoardCards(Game game, StringBuilder sb) {
+		int cardBaseIndex = 0;
+		for (int r = 0; r < round; ++ r) {
+			// print round separator
+			if (r != 0) {
+				sb.append("/");
+			}
+			
+			for(int n = 0; n < game.numBoardCards[r]; ++ n) {
+				printCard(game, boardCards[cardBaseIndex + n], sb);
+			}
+			cardBaseIndex += game.numBoardCards[r];
+		}
+	}
+	
+	public void printState(Game game, GameState state) {
+		// MATCHSTATE:
+		StringBuilder sb = new StringBuilder("MATCHSTATE:");
+		
+		// MATCHSTATE:player
+		sb.append(":" + viewingPlayer);
+		
+		// MATCHSTATE:player:handId:betting
+		sb.append(":" + handID);
+		printBetting(game, sb);
+		
+		// MATCHSTATE:player:handId:betting:holecards
+		printHoleCards(game, sb);
+		
+		// MATCHSTATE:player:handId:betting:holecards:boardcards
+	}
+	
 	
 	public Object clone() {
 

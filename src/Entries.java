@@ -103,8 +103,8 @@ public class Entries {
 		}
 		
 		//没读完
-		if (index + 1 != totalNumEntries) {
-			System.out.println("error while loading ; only read" + (index + 1) + "of" + totalNumEntries + "entries");
+		if (index != totalNumEntries) {
+			System.out.println("error while loading ; only read" + index + "of" + totalNumEntries + "entries");
 			din.close();
 			return true;
 		}

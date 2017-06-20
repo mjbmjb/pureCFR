@@ -69,7 +69,7 @@ public class PureCfrMachine implements IGame{
 		// Dump avg strategy
 		try {
 			for (int r = 0;r < MAX_ROUNDS; ++r) {
-				if (regrets[r].write(files)) {
+				if (avgStrategy[r].write(files)) {
 					System.out.println("(write)Error while dumping round" + r + "to file" + filenames);
 					return true;
  				}
@@ -102,7 +102,7 @@ public class PureCfrMachine implements IGame{
 		// Dump avg strategy
 		try {
 			for (int r = 0;r < MAX_ROUNDS; ++r) {
-				if (regrets[r].load(files)) {
+				if (avgStrategy[r].load(files)) {
 					System.out.println("(read)Error while dumping round" + r + "to file" + filenames);
 					return true;
  				}

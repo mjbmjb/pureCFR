@@ -41,32 +41,32 @@ public class TestChild{
 //			}
 //		}
 //		
-		DataInputStream dout = null;
-		double[] b = new double[1000];
-		try {
-			File file = new File("mjb.iter-8239010.secs-0.regrets");
-
-			dout = new DataInputStream(new FileInputStream(file));
-			for(int c = 0; c < b.length; ++ c) {
-				 b[c] = dout.readDouble();
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		} finally {
-			try {
-				dout.close();
-			} catch (Exception e2) {
-				// TODO: handle exception
-			}
-		}
-		
-		for (int iter = 0; iter < b.length; ++iter) {
-			if (iter % 10 == 0) {
-				MyUtil.prl(" ");
-			}
-			MyUtil.pr(b[iter] + "--");
-		}
+//		DataInputStream dout = null;
+//		double[] b = new double[1000];
+//		try {
+//			File file = new File("mjb.iter-8239010.secs-0.regrets");
+//
+//			dout = new DataInputStream(new FileInputStream(file));
+//			for(int c = 0; c < b.length; ++ c) {
+//				 b[c] = dout.readDouble();
+//			}
+//			
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		} finally {
+//			try {
+//				dout.close();
+//			} catch (Exception e2) {
+//				// TODO: handle exception
+//			}
+//		}
+//		
+//		for (int iter = 0; iter < b.length; ++iter) {
+//			if (iter % 10 == 0) {
+//				MyUtil.prl(" ");
+//			}
+//			MyUtil.pr(b[iter] + "--");
+//		}
 		
 //		System.out.println(b);
 		
@@ -74,7 +74,7 @@ public class TestChild{
 //		copy(c);
 //		int a = 1;
 		
-		
+		String a = ""
 		
 	}
 	

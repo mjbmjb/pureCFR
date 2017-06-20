@@ -8,6 +8,11 @@ public class Game implements IGame {
 		blind[0] = SMALL_BLIND;
 		blind[1] = BIG_BLIND;
 	}
+	
+		  public String suitType = "shdc";
+	
+		  public String rankType = "QKA";
+		  
 		  /* stack sizes for each player */
 		  public int[] stack = new int[ MAX_PLAYERS ];
 
