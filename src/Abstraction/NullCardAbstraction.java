@@ -1,3 +1,9 @@
+package Abstraction;
+import Cfr.Hand;
+import Node.BettingNode;
+import Para.Game;
+import Cfr.GameState;
+
 
 public class NullCardAbstraction extends CardAbstarction {
 	protected int deckSize;

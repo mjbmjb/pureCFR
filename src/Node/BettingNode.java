@@ -1,3 +1,11 @@
+package Node;
+import Abstraction.ActionAbstraction;
+import Cfr.ActionType;
+import Cfr.GameState;
+import Cfr.Hand;
+import Para.Game;
+import Para.IGame;
+
 
 public class BettingNode implements IGame{
 	protected int showdown;
@@ -155,7 +163,7 @@ public class BettingNode implements IGame{
 		}
 		assert(last_child != null);
 		last_child.setSibling(null);
-		node = new InfoSetNode(solnIdx, numChoices, state.currentPlayer(), state.getRound(), first_child);
+		node = new InfoSetNode(solnIdx, numChoices, state.currentPlayer(game), state.getRound(), first_child);
 		return node;
 	}
 	

@@ -1,9 +1,10 @@
+package Para;
 
 public class Game implements IGame {
 
 	public Game() {
-		stack[0] = 1000;
-		stack[1] = 1000;
+		stack[0] = 2;
+		stack[1] = 2;
 		
 		blind[0] = SMALL_BLIND;
 		blind[1] = BIG_BLIND;

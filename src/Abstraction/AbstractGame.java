@@ -1,3 +1,9 @@
+package Abstraction;
+import Node.BettingNode;
+import Para.Game;
+import Cfr.GameState;
+import Para.IGame;
+
 
 public class AbstractGame implements IGame{
 	public BettingNode bettingTreeRoot;

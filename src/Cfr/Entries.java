@@ -1,3 +1,4 @@
+package Cfr;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -7,6 +8,8 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import MyUtil.MyUtil;
 
 /**
  *  A class for storing regret and avg strategies of variable type.

@@ -1,3 +1,6 @@
+package Node;
+import Cfr.Hand;
+
 
 public class TerminalNode extends BettingNode {
 	static int soln_idx;

@@ -1,5 +1,11 @@
+package Cfr;
 import java.io.File;
 import java.util.Arrays;
+
+import Abstraction.AbstractGame;
+import Node.BettingNode;
+import Para.Game;
+import Para.IGame;
 
 
 public class PureCfrMachine implements IGame{

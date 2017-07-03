@@ -1,3 +1,9 @@
+package Cfr;
+import MyUtil.MyUtil;
+import Para.Game;
+import Para.IGame;
+import Para.Patameters;
+
 
 public class PureCfr implements IGame {
 	Game game;

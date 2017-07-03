@@ -1,3 +1,4 @@
+package Cfr;
 public class ActionType implements Cloneable {
 	private char name;
 	private int size;

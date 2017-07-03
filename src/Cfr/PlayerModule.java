@@ -1,7 +1,13 @@
+package Cfr;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
+
+import Abstraction.AbstractGame;
+import MyUtil.MyUtil;
+import Node.BettingNode;
+import Para.IGame;
 
 
 public class PlayerModule implements IGame{
@@ -9,7 +15,7 @@ public class PlayerModule implements IGame{
 	protected boolean verbose;
 	protected Entries[] entries = new Entries[MAX_ROUNDS];
 	public PlayerModule(File file) {
-		this.verbose = true;
+		this.verbose = false;
 		
 		/* Open up the player file for reading */
 		

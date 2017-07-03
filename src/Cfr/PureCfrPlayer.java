@@ -1,3 +1,4 @@
+package Cfr;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +8,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+
+import Abstraction.AbstractGame;
+import MyUtil.MyUtil;
+import Para.IGame;
 
 
 public class PureCfrPlayer implements IGame {

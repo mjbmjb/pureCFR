@@ -1,3 +1,6 @@
+package Cfr;
+import Para.IGame;
+
 
 public class Hand implements IGame{
 	/* The actual cards for this hand */	

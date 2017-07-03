@@ -1,3 +1,6 @@
+package Node;
+import Para.IGame;
+
 
 public class InfoSetNode extends BettingNode implements IGame{
 	protected  int solnIdx;

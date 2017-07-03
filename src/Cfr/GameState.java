@@ -1,7 +1,13 @@
+package Cfr;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
+
+import MyUtil.MyUtil;
+import Para.Game;
+import Para.IGame;
 
 //import javax.print.attribute.standard.RequestingUserName;
 //import javax.swing.plaf.basic.BasicInternalFrameTitlePane.IconifyAction;
@@ -204,41 +210,9 @@ public class GameState implements IGame, Cloneable {
 		this.spent = spent;
 	}
 
-	public void setPlayerFolded(int position) {
-		playerFolded[position] = false;
-	}
-
-	public void setStateFinished() {
-		finished = false;
-
-	}
-
 	public int getActingPlayer(int round, int action) {
 		return actingPlayer[round][action];
 	}
-
-	
-
-	public int currentPlayer() {
-		int curPlayer = 0;
-		/*
-		 * if Action has already been made, compute next player from last player
-		 */
-		if (numActions[round] != 0) {
-			//curPlayer=numActions[round]-1;
-			curPlayer=actingPlayer[round][numActions[round]-1];
-			do {
-				curPlayer = (curPlayer + 1) % MAX_PLAYERS;
-			} while (playerFolded[curPlayer] == true || spent[curPlayer] >= STACK_SIZE);
-		} else {
-			if (round == 0)
-				return 1;
-			else
-				return 0;
-		}
-		return curPlayer;
-	}
-
 	public int numRaises() {
 		int ret = 0;
 		for (int i = 0;i < numActions[getRound()]; ++i) {
@@ -292,7 +266,7 @@ public class GameState implements IGame, Cloneable {
 	}
 
 	public void doAction(Game game, ActionType act) {
-		int p = currentPlayer();
+		int p = currentPlayer(game);
 		assert(act != null);
 		action[round][numActions[round]] = (ActionType) act.clone();
 		actingPlayer[round][numActions[round]] = p;
@@ -425,7 +399,7 @@ public class GameState implements IGame, Cloneable {
 			 */
 			return false;
 		}
-		int p = currentPlayer();
+		int p = currentPlayer(game);
 		raiseSize[0] = minNoLimitRaiseTo;
 		raiseSize[1] = STACK_SIZE;
 
@@ -459,7 +433,7 @@ public class GameState implements IGame, Cloneable {
 		if (finished) {
 			return false;
 		}
-		p = currentPlayer();
+		p = currentPlayer(game);
 		if (action.getType() == 'r') {
 			if (!raiseIsValid(game, raiseSize)) {
 				return false;
@@ -472,7 +446,7 @@ public class GameState implements IGame, Cloneable {
 				}
 			}
 		} else if (action.getType() == 'f') {
-			if (spent[p] == maxSpent || spent[p] == STACK_SIZE) {
+			if (spent[p] == maxSpent || spent[p] == game.stack[p]) {
 //				if (spent[p] == BIG_BLIND) {
 //					return true;
 //				} else {
@@ -582,6 +556,7 @@ public class GameState implements IGame, Cloneable {
 	public int currentPlayer(Game game) {
 		/* if action has already been made, compute next player from last player */
 		if (numActions[round] != 0) {
+			assert(false);
 			return nextPlayer(game, actingPlayer[round][numActions[round]]);
 		}
 		
@@ -776,33 +751,33 @@ public class GameState implements IGame, Cloneable {
 	}
 	
 	
-	public int printStateCommon(Game game, int maxLen, StringBuilder strb) {
-		int c, r;
-		// Header
-		c = 0;
-		
-		// Header:handId:
-		r = strb.append(":").length();
-		if (r < 0) {
-			return -1;
-		}
-		c += r;
-		
-		/* HEADER:handId:betting */
-		r = printBetting(game,maxLen - c, strb);
-		if (r < 0)  {
-			return -1;
-		}
-		c += r;
-
-		/* HEADER:handId:betting: */
-		if (c >= maxLen) {
-			return -1;
-		}
-		strb.append(':');
-		++c;
-		return c;
-	}
+//	public int printStateCommon(Game game, int maxLen, StringBuilder strb) {
+//		int c, r;
+//		// Header
+//		c = 0;
+//		
+//		// Header:handId:
+//		r = strb.append(":").length();
+//		if (r < 0) {
+//			return -1;
+//		}
+//		c += r;
+//		
+//		/* HEADER:handId:betting */
+//		r = printBetting(game,maxLen - c, strb);
+//		if (r < 0)  {
+//			return -1;
+//		}
+//		c += r;
+//
+//		/* HEADER:handId:betting: */
+//		if (c >= maxLen) {
+//			return -1;
+//		}
+//		strb.append(':');
+//		++c;
+//		return c;
+//	}
 	
 	
 	
@@ -911,6 +886,7 @@ public class GameState implements IGame, Cloneable {
 		printHoleCards(game, sb);
 		
 		// MATCHSTATE:player:handId:betting:holecards:boardcards
+		printBoardCards(game, sb);
 	}
 	
 	

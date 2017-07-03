@@ -1,5 +1,6 @@
+package Para;
 
-interface IGame {
+public interface IGame {
 	public static int MAX_PLAYERS = 2;
 	public static int MAX_ROUNDS = 1;
 	public static int MAX_BOARD_CARDS=1;
